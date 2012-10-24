@@ -11,6 +11,7 @@
  */
 package clueGame;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +20,31 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class Board {
+	private class Solution {
+		public String person;
+		public String weapon;
+		public String room;
+		
+		public Solution(String person, String weapon, String room) {
+			this.person = person;
+			this.weapon = weapon;
+			this.room = room;
+		}
+		
+		public boolean verifyGuess(String guessPerson, String guessWeapon, String guessRoom)
+		{
+			return (this.person.equals(guessPerson) && this.weapon.equals(guessWeapon) && this.room.equals(guessRoom));
+		}
+	}
+	
 	// Variables
+	private ArrayList<ComputerPlayer> computerPlayers;
+	//In case we ever want more than one human player
+	private ArrayList<HumanPlayer> humanPlayer;
+	private ArrayList<Card> cards;
+	private Solution solution;
 	private ArrayList<BoardCell> cells;
 	private Map<Character,String> rooms;
 	private int numRows;
@@ -31,11 +53,14 @@ public class Board {
 	private Set<BoardCell> targets;
 	private boolean[] seen; 
 	// Change names to load the respective files
-	private final String legend = "ClueLegend.txt";
-	private final String layout = "ClueLayout.csv";
+	private final String legend = "~/../legend.csv";
+	private final String layout = "~/../clue_board.csv";
 	
 	// Constructor
 	public Board() {
+		computerPlayers = new ArrayList<ComputerPlayer>();
+		humanPlayer = new ArrayList<HumanPlayer>();
+		cards = new ArrayList<Card>();
 		cells = new ArrayList<BoardCell>();
 		rooms = new HashMap<Character,String>();
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
@@ -50,27 +75,39 @@ public class Board {
 	 * into cells and rooms variables.
 	 */
 	public void loadConfigFiles() {
-		//This will be incremented to 0 for the first row later on
+		Scanner scn;
+		String line;
+		
+		//This will be incremented to 0 for the first row later on		
 		numRows = -1;
 		try{
 			//Read in the legend and load up the rooms maps
-			Scanner scn = new Scanner(new FileReader(legend));
-			String line;
+			scn = new Scanner(new FileReader(legend));
 			while(scn.hasNext()){
 				line = scn.nextLine();
 				if(!line.contains(",")){
 					throw new BadConfigFormatException("One of your lines doesn't contain 2 entries.");
 				}
 				String[] split = line.split(",");
-				try{
-					split[2] = "";
+				
+				if (split.length > 2) {
 					throw new BadConfigFormatException("Legend: A line has more than 2 entries");
-				} catch(ArrayIndexOutOfBoundsException e){
-					//We wanted it to throw an exception, it means there's only two values that were read in
 				}
 				rooms.put(split[0].charAt(0),split[1].trim());
 			}
-
+		}
+		catch (FileNotFoundException ex)
+		{
+			System.out.println(legend + " could not be found!");
+			return;
+		}
+		catch (BadConfigFormatException ex)
+		{
+			System.out.println(ex.toString());
+			return;
+		}
+		
+		try {
 			//Read the layout file and load up the cells ArrayList
 			scn = new Scanner(new FileReader(layout));
 			while(scn.hasNext()){
@@ -79,13 +116,9 @@ public class Board {
 				line = scn.nextLine();
 				String[] split = line.split(",");
 				for(String i : split){
-					try{
-						i.charAt(2);
+					if (i.length() > 2) {
 						throw new BadConfigFormatException("Unknown room identifier: " + i);
-					} catch(StringIndexOutOfBoundsException e){
-						//We wanted the exception to be thrown, it means there's a three character string in
-						//layout
-					}
+					} 
 					numColumns += 1;
 					if(rooms.get(i.charAt(0)).equals("Walkway")){
 						cells.add(new WalkwayCell(numRows,numColumns));
@@ -100,8 +133,15 @@ public class Board {
 			if(cells.size() != numRows*numColumns){
 				throw new BadConfigFormatException("Config is not rectangular!");
 			}
-		} catch(Exception e){
-			e.printStackTrace();
+		} 
+		catch(FileNotFoundException ex){
+			System.out.println(layout + " could not be found!");
+			return;
+		}
+		catch (BadConfigFormatException ex)
+		{
+			System.out.println(ex.toString());
+			return;
 		}
 	}
 
@@ -112,6 +152,21 @@ public class Board {
 	/*
 	 * Name is self explanatory
 	 */
+	public ArrayList<ComputerPlayer> getComputerPlayers()
+	{
+		return computerPlayers;
+	}
+	
+	public HumanPlayer getHumanPlayer()
+	{
+		return humanPlayer.get(0);
+	}
+	
+	public ArrayList<Card> getCards()
+	{
+		return cards;
+	}
+	
 	public RoomCell getRoomCellAt(int row, int col){
 		if(cells.get(calcIndex(row,col)).isRoom()){
 			RoomCell temp = (RoomCell) cells.get(calcIndex(row,col));
@@ -176,83 +231,6 @@ public class Board {
 			seen[i] = false;
 		}	
 		calcTargetsRecurse(start, steps, steps);
-		
-		
-		
-		/*
-		 * This was our old calcTargets algorithm that failed under conditions where
-		 * back tracking was present. If that condition wasn't there, this would calculate
-		 * the targets list in ~O(n^2) time instead of the O(4^n) time that is the recursive
-		 * algorithm. 
-		 *
-		 * The first part of the algorithm creates a checkerboard pattern of all possible
-		 * targets with start being the center. The next part of the algorithm was a 
-		 * breadth first search (bfs) starting from start and fanning out by steps. We then intersect
-		 * the checkerboard with the bfs to create the final targets list, with the exception 
-		 * that if the bfs encountered a door, add it to the targets list as well.
-		 */
-//		LinkedList<Integer> temp = new LinkedList<Integer>();
-//		// make a box
-//		for (int i = steps; i > 0; i -= 2) {
-//			int leftCol = start%numColumns - i;
-//			int rightCol = start%numColumns + i;
-//			int upRow = start/numColumns - i;
-//			int downRow = start/numColumns + i;
-//			for (int j = 0; j < i; ++j) {
-//				// top-left quarter of box
-//				if (leftCol + j >= 0 && start/numColumns - j >= 0 && start/numColumns < numColumns) 
-//					temp.add(calcIndex(start/numColumns - j, leftCol + j));
-//				// top-right quarter of box
-//				if (upRow + j >= 0 && start%numColumns + j >= 0 && start%numColumns + j < numColumns)
-//					temp.add(calcIndex(upRow + j, start%numColumns + j));
-//				// bottom-right quarter of box
-//				if (rightCol - j < numColumns && start/numColumns + j < numRows && start/numColumns + j >= 0) 
-//					temp.add(calcIndex(start/numColumns + j, rightCol - j));
-//				// bottom-left quarter of box
-//				if (downRow - j < numRows && start%numColumns - j < numColumns && start%numColumns - j >= 0)
-//					temp.add(calcIndex(downRow - j, start%numColumns - j));
-//			}
-//		}
-//		Set<Integer> bfs = new TreeSet<Integer>();
-//		LinkedList<Integer> next = new LinkedList<Integer>(getAdjList(start));
-//		LinkedList<Integer> current = new LinkedList<Integer>();
-//		LinkedList<Integer> previous = new LinkedList<Integer>();
-//		System.out.print("BFS from ");
-//		inverseCalcIndex(start);
-//		for(int i = 0; i < steps; ++i){
-//			if (i > 0) {
-//				previous = new LinkedList<Integer>(current);
-//			}
-//			else {
-//				previous = new LinkedList<Integer>();
-//				previous.add(start);
-//			}
-//			current = new LinkedList<Integer>(next);
-//			next.clear();
-//			for(int j = 0; j < current.size(); ++j){
-//				if(!bfs.contains(current.get(j))){
-//					bfs.add(current.get(j));
-//					for (int k = 0; k < getAdjList(current.get(j)).size(); ++k) {
-//						if (!previous.contains(getAdjList(current.get(j)).get(k))) {
-//							next.add(getAdjList(current.get(j)).get(k));
-//						}
-//					}
-//				}
-//			}
-//		}
-//		LinkedList<Integer> print = new LinkedList<Integer>();
-//		for(Integer i : bfs){
-//			if(i == start) continue;
-//			if(temp.contains(i) || cells.get(i).isDoorway()){
-//				print.add(i);
-//				targets.add(cells.get(i));
-//			}
-//		}
-//		System.out.print("starting from: ");
-//		inverseCalcIndex(start);
-//		for(Integer i : print){
-//			inverseCalcIndex(i);
-//		}
 	}
 	
 	/*

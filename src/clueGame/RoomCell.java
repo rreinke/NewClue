@@ -13,7 +13,9 @@ public class RoomCell extends BoardCell {
 		this.roomInitial = symbol.charAt(0);
 		this.cellType = symbol.charAt(0);
 		char temp;
-		try{
+		
+		if (symbol.length() > 1)
+		{
 			temp = symbol.charAt(1);
 			//System.out.println(row + " " + col + " " + temp);
 			switch(temp){
@@ -31,10 +33,14 @@ public class RoomCell extends BoardCell {
 				break;
 			default:
 				doorDirection = DoorDirection.NONE;
+				break;
 			}
-		} catch(StringIndexOutOfBoundsException e){
+		}
+		else
+		{
 			doorDirection = DoorDirection.NONE;
 		}
+				
 	}	
 
 	@Override
