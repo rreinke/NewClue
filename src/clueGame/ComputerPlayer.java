@@ -1,15 +1,23 @@
 package clueGame;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class ComputerPlayer extends Player {
 
 	private char lastRoomVisited;
 	private ArrayList<Card> seenCards;
 	
-	public ComputerPlayer(String name, WalkwayCell startingLocation) {
+	public ComputerPlayer() {
+		super();
+		lastRoomVisited = '?';
+		seenCards = new ArrayList<Card>();
+	}
+	
+	public ComputerPlayer(String name, Color color, BoardCell startingLocation) {
 		// TODO Auto-generated constructor stub
-		super(name, startingLocation);
+		super(name, color, startingLocation);
 		lastRoomVisited = '?';
 		seenCards = new ArrayList<Card>();
 	}
@@ -31,7 +39,7 @@ public class ComputerPlayer extends Player {
 		return;
 	}
 
-	public BoardCell pickLocation(ArrayList<BoardCell> targets)
+	public BoardCell pickLocation(Set<BoardCell> targets)
 	{
 		return new WalkwayCell(0,0);
 	}

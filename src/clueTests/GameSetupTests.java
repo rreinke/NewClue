@@ -30,17 +30,17 @@ public class GameSetupTests {
 		Player player = board.getHumanPlayer();
 		Assert.assertEquals("Mrs. Peacock", player.getName());
 		Assert.assertEquals(Color.BLUE, player.getColor());
-		Assert.assertEquals(new WalkwayCell(5,1), player.getStartingLocation());
+		Assert.assertEquals(new WalkwayCell(4,0), player.getCurrentLocation());
 		
 		player = board.getComputerPlayer(0);
 		Assert.assertEquals("Colonel Mustard", player.getName());
 		Assert.assertEquals(Color.YELLOW, player.getColor());
-		Assert.assertEquals(new WalkwayCell(1,5), player.getStartingLocation());
+		Assert.assertEquals(new WalkwayCell(0,5), player.getCurrentLocation());
 		
 		player = board.getComputerPlayer(4);
 		Assert.assertEquals("Professor Plum", player.getName());
 		Assert.assertEquals(Color.PINK, player.getColor());
-		Assert.assertEquals(new WalkwayCell(16,4), player.getStartingLocation());
+		Assert.assertEquals(new WalkwayCell(15,4), player.getCurrentLocation());
 	}
 
 	@Test
@@ -75,7 +75,7 @@ public class GameSetupTests {
 		Assert.assertEquals(6, personCards);
 		Assert.assertTrue(testCards.contains(new Card("Mrs. Peacock", CardType.PERSON)));
 		Assert.assertTrue(testCards.contains(new Card("Candlestick", CardType.WEAPON)));
-		Assert.assertTrue(testCards.contains(new Card("Kafadar", CardType.ROOM)));
+		Assert.assertTrue(testCards.contains(new Card("Green Center", CardType.ROOM)));
 	}
 	
 	@Test

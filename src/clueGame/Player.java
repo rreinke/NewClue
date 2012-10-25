@@ -10,21 +10,21 @@ public abstract class Player {
 	private String name;
 	private ArrayList<Card> cards;
 	private Color color;
-	private WalkwayCell startingLocation;
+	private BoardCell currentLocation;
 	
-	public Player(String name, WalkwayCell startingLocation) {
+	public Player() {
 		// TODO Auto-generated constructor stub
-		this.name = name;
+		this.name = "???";
 		cards = new ArrayList<Card>();
 		color = Color.BLACK;
-		this.startingLocation = startingLocation;
+		this.currentLocation = new WalkwayCell(0,0);
 	}
 	
-	public Player(String name, Color color, WalkwayCell startingLocation) {
+	public Player(String name, Color color, BoardCell startingLocation) {
 		this.name = name;
 		cards = new ArrayList<Card>();
 		this.color = color;
-		this.startingLocation = startingLocation;
+		this.currentLocation = startingLocation;
 	}
 
 	public String getName()
@@ -42,9 +42,9 @@ public abstract class Player {
 		return color;
 	}
 	
-	public WalkwayCell getStartingLocation()
+	public BoardCell getCurrentLocation()
 	{
-		return startingLocation;
+		return currentLocation;
 	}
 	
 	public void addCard(Card card)

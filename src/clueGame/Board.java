@@ -139,7 +139,7 @@ public class Board {
 	 */
 	public ComputerPlayer getComputerPlayer(int index)
 	{
-		return new ComputerPlayer("???", new WalkwayCell(0,0));
+		return new ComputerPlayer();
 	}
 	
 	public ArrayList<ComputerPlayer> getComputerPlayers()
@@ -149,7 +149,7 @@ public class Board {
 	
 	public HumanPlayer getHumanPlayer()
 	{
-		return new HumanPlayer("???", new WalkwayCell(0,0));
+		return new HumanPlayer();
 	}
 	
 	public ArrayList<Card> getCards()
