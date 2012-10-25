@@ -22,23 +22,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Board {
-	private class Solution {
-		public String person;
-		public String weapon;
-		public String room;
-		
-		public Solution(String person, String weapon, String room) {
-			this.person = person;
-			this.weapon = weapon;
-			this.room = room;
-		}
-		
-		public boolean verifyGuess(String guessPerson, String guessWeapon, String guessRoom)
-		{
-			return (this.person.equals(guessPerson) && this.weapon.equals(guessWeapon) && this.room.equals(guessRoom));
-		}
-	}
-	
+
 	// Variables
 	private ArrayList<ComputerPlayer> computerPlayers;
 	//In case we ever want more than one human player
@@ -67,6 +51,7 @@ public class Board {
 		targets = new HashSet<BoardCell>();
 		loadConfigFiles();
 		calcAdjacencies();
+		deal();
 		seen = new boolean[cells.size()];
 	}
 
@@ -152,6 +137,11 @@ public class Board {
 	/*
 	 * Name is self explanatory
 	 */
+	public ComputerPlayer getComputerPlayer(int index)
+	{
+		return new ComputerPlayer("???", new WalkwayCell(0,0));
+	}
+	
 	public ArrayList<ComputerPlayer> getComputerPlayers()
 	{
 		return computerPlayers;
@@ -159,7 +149,7 @@ public class Board {
 	
 	public HumanPlayer getHumanPlayer()
 	{
-		return humanPlayer.get(0);
+		return new HumanPlayer("???", new WalkwayCell(0,0));
 	}
 	
 	public ArrayList<Card> getCards()
@@ -313,6 +303,34 @@ public class Board {
 				}
 			}
 		}
+	}
+	
+	public void deal()
+	{
+		return;
+	}
+	
+	public boolean checkAccusation(Card person, Card weapon, Card room)
+	{
+		return false;
+	}
+	
+	public void handleSuggestion(Card person, Card weapon, Card room)
+	{
+		return;
+	}
+	
+	public void selectAnswer()
+	{
+		return;
+	}
+	
+	//This is for testing purposes only and should not be called anywhere in the game play	
+	public void setSolution (Solution solution)
+	{
+		this.solution = solution;
+		
+		return;
 	}
 }
 

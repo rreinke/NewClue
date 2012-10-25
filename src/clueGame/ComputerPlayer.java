@@ -14,15 +14,30 @@ public class ComputerPlayer extends Player {
 		seenCards = new ArrayList<Card>();
 	}
 
+	public char getLastRoomVisited()
+	{
+		return lastRoomVisited;
+	}
+	
+	public ArrayList<Card> getSeenCards()
+	{
+		return seenCards;
+	}
+	
 	public void updateSeen (Card seen)
 	{
 		seenCards.add(seen);
 		
 		return;
 	}
-	
+
 	public BoardCell pickLocation(ArrayList<BoardCell> targets)
 	{
-		return targets.get(0);
+		return new WalkwayCell(0,0);
+	}
+	
+	public void createSuggestion()
+	{
+		return;
 	}
 }

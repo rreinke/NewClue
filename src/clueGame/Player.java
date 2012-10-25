@@ -32,6 +32,11 @@ public abstract class Player {
 		return name;
 	}
 	
+	public ArrayList<Card> getCards()
+	{
+		return cards;
+	}
+	
 	public Color getColor()
 	{
 		return color;
