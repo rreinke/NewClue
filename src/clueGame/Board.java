@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import clueGame.Card.CardType;
+
 public class Board {
 
 	// Variables
@@ -315,9 +317,14 @@ public class Board {
 		return false;
 	}
 	
-	public void handleSuggestion(Card person, Card weapon, Card room)
+	public Card handleSuggestion(Card person, Card weapon, Card room)
 	{
-		return;
+		return new Card ("???", CardType.PERSON);
+	}
+	
+	public Card handleSuggestion(Card person, Card weapon, Card room, Player currentPlayer)
+	{
+		return new Card("???", CardType.PERSON);
 	}
 	
 	public void selectAnswer()
@@ -329,6 +336,21 @@ public class Board {
 	public void setSolution (Solution solution)
 	{
 		this.solution = solution;
+		
+		return;
+	}
+	//This is for testing purposes only and should not be called anywhere in the game play	
+	public void setComputerPlayers (ArrayList<ComputerPlayer> computerPlayers)
+	{
+		this.computerPlayers = computerPlayers;
+		
+		return;
+	}
+	//This is for testing purposes only and should not be called anywhere in the game play	
+	public void setHumanPlayer (HumanPlayer humanPlayer)
+	{
+		this.humanPlayer.clear();
+		this.humanPlayer.add(humanPlayer);
 		
 		return;
 	}

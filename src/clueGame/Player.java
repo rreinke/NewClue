@@ -47,13 +47,18 @@ public abstract class Player {
 		return currentLocation;
 	}
 	
+	public void setCurrentLocation(BoardCell currentLocation)
+	{
+		this.currentLocation = currentLocation;
+	}
+	
 	public void addCard(Card card)
 	{
 		cards.add(card);
 	}
 	
-	public Card disproveSuggestion(String person, String room, String weapon)
+	public Card disproveSuggestion(Card person, Card room, Card weapon)
 	{
-		return new Card(person, CardType.PERSON);
+		return new Card("???", CardType.PERSON);
 	}
 }

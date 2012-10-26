@@ -8,6 +8,9 @@ public class ComputerPlayer extends Player {
 
 	private char lastRoomVisited;
 	private ArrayList<Card> seenCards;
+	private Card suggestedRoom;
+	private Card suggestedPerson;
+	private Card suggestedWeapon;
 	
 	public ComputerPlayer() {
 		super();
@@ -32,6 +35,18 @@ public class ComputerPlayer extends Player {
 		return seenCards;
 	}
 	
+	public Card getSuggestedRoom() {
+		return suggestedRoom;
+	}
+	
+	public Card getSuggestedPerson() {
+		return suggestedPerson;
+	}
+	
+	public Card getSuggestedWeapon() {
+		return suggestedWeapon;
+	}
+	
 	public void updateSeen (Card seen)
 	{
 		seenCards.add(seen);
@@ -47,5 +62,11 @@ public class ComputerPlayer extends Player {
 	public void createSuggestion()
 	{
 		return;
+	}
+	
+	//This is for testing purposes only and should not be called anywhere in the game play	
+	public void setLastRoomVisited(char lastRoomVisited)
+	{
+		this.lastRoomVisited = lastRoomVisited;
 	}
 }
