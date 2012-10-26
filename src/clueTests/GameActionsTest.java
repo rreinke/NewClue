@@ -190,10 +190,12 @@ public class GameActionsTest {
 		board.setComputerPlayers(computerPlayers);
 		board.setHumanPlayer(human);
 		
-		Assert.assertEquals(null, board.handleSuggestion(person, room, weapon, human));
-		Assert.assertEquals(revolverCard, board.handleSuggestion(person, room, revolverCard, human));
-		Assert.assertEquals(meyerCard, board.handleSuggestion(person, meyerCard, weapon, human));
-		Assert.assertEquals(mustardCard, board.handleSuggestion(mustardCard, room, weapon, human));
+		board.setCurrentPlayer(human);
+		
+		Assert.assertEquals(null, board.handleSuggestion(person, room, weapon));
+		Assert.assertEquals(revolverCard, board.handleSuggestion(person, room, revolverCard));
+		Assert.assertEquals(meyerCard, board.handleSuggestion(person, meyerCard, weapon));
+		Assert.assertEquals(mustardCard, board.handleSuggestion(mustardCard, room, weapon));
 	}
 	
 	@Test
@@ -284,14 +286,22 @@ public class GameActionsTest {
 		board.setComputerPlayers(computerPlayers);
 		board.setHumanPlayer(human);
 		
-		Assert.assertEquals(null, board.handleSuggestion(person, room, weapon, human));
-		Assert.assertEquals(peacockCard, board.handleSuggestion(peacockCard, room, weapon, player));
-		Assert.assertEquals(null, board.handleSuggestion(peacockCard, room, weapon, human));
-		Assert.assertEquals(null, board.handleSuggestion(mustardCard, room, weapon, player));
+		//These are the tests for the computer player suggestions
+		board.setCurrentPlayer(player);
+		
+		Assert.assertEquals(peacockCard, board.handleSuggestion(peacockCard, room, weapon));
+		Assert.assertEquals(null, board.handleSuggestion(mustardCard, room, weapon));
+		
+		//The rest of the tests are for the human
+		board.setCurrentPlayer(human);
+		
+		Assert.assertEquals(null, board.handleSuggestion(person, room, weapon));
+		Assert.assertEquals(null, board.handleSuggestion(peacockCard, room, weapon));
+		
 		
 		for (int i=0; i<100; i++)
 		{
-			Card temp = board.handleSuggestion(mustardCard, greenCenterCard, ropeCard, human);
+			Card temp = board.handleSuggestion(mustardCard, greenCenterCard, ropeCard);
 			
 			if (temp.equals(mustardCard))
 			{

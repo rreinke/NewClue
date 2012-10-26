@@ -324,11 +324,6 @@ public class Board {
 		return new Card ("???", CardType.PERSON);
 	}
 	
-	public Card handleSuggestion(Card person, Card weapon, Card room, Player currentPlayer)
-	{
-		return new Card("???", CardType.PERSON);
-	}
-	
 	public void selectAnswer()
 	{
 		return;
@@ -355,6 +350,12 @@ public class Board {
 		this.humanPlayer.add(humanPlayer);
 		
 		return;
+	}
+	
+	//This is for testing purposes only and should not be called anywhere in the game play
+	public void setCurrentPlayer (Player player)
+	{
+		this.currentPlayer = currentPlayer;
 	}
 }
 
