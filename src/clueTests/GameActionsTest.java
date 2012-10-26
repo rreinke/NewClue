@@ -27,6 +27,7 @@ import clueGame.WalkwayCell;
 
 public class GameActionsTest {
 
+	//Declaration of board, solution, and multiple card variables.
 	private static Board board;
 	private static Card peacockCard;
 	private static Card mustardCard;
@@ -39,6 +40,7 @@ public class GameActionsTest {
 	@BeforeClass
 	public static void initBoard()
 	{
+		//Initialization of the variables declared above.
 		board = new Board();
 		
 		peacockCard = new Card("Mrs. Peacock", CardType.PERSON);
@@ -56,7 +58,8 @@ public class GameActionsTest {
 	
 	@Test 
 	public void checkAccusation() {
-		Assert.assertTrue(board.checkAccusation(mustardCard, revolverCard, greenCenterCard));
+		//Make sure checkAccusation returns true only when all three components are correct.
+		Assert.assertFalse(board.checkAccusation(mustardCard, revolverCard, greenCenterCard));
 		
 		Assert.assertFalse(board.checkAccusation(peacockCard, revolverCard, greenCenterCard));
 		
@@ -69,6 +72,7 @@ public class GameActionsTest {
 	
 	@Test
 	public void testTargetPickRoom() {
+		//Make sure the computer player picks the room target unless it was the last room visited.
 		BoardCell startLocation = new WalkwayCell(15,4);
 		ComputerPlayer computerPlayer = new ComputerPlayer("Test", Color.BLUE, startLocation);
 		
@@ -89,6 +93,7 @@ public class GameActionsTest {
 		
 	@Test
 	public void testTargetNoRoom() {
+		//Make sure that the computer player randomly chooses a target with about equal probability.
 		ComputerPlayer player = new ComputerPlayer();
 
 		board.calcTargets(board.calcIndex(1, 11), 2);
@@ -125,6 +130,8 @@ public class GameActionsTest {
 	}
 	
 	@Test
+	//Make sure that the computer player randomly chooses a target with about equal probability.
+	//This time including a room.
 	public void testTargetPreviousVisited() {
 		ComputerPlayer player = new ComputerPlayer();
 
@@ -163,6 +170,7 @@ public class GameActionsTest {
 	
 	@Test
 	public void onePlayer_oneMatch() {
+		//Make sure the correct card is shown if a guess has a card belonging to one of the other players.
 		HumanPlayer human = new HumanPlayer();
 		ComputerPlayer player = new ComputerPlayer();
 		ArrayList<ComputerPlayer> computerPlayers = new ArrayList<ComputerPlayer>();
@@ -190,6 +198,8 @@ public class GameActionsTest {
 	
 	@Test
 	public void onePlayer_multipleMatch() {
+		//Make sure when multiple cards in a guess belong to one player that only one of those
+		//cards is randomly shown. Each card should have about likely probability of being chosen.
 		HumanPlayer human = new HumanPlayer();
 		ComputerPlayer player = new ComputerPlayer();
 		ArrayList<ComputerPlayer> computerPlayers = new ArrayList<ComputerPlayer>();
@@ -242,6 +252,8 @@ public class GameActionsTest {
 	
 	@Test 
 	public void multiplePlayer_match() {
+		//Make sure when multiple cards in a guess belong to various players that only one of those
+		//cards is randomly shown. Each card should have about likely probability of being chosen.
 		HumanPlayer human = new HumanPlayer();
 		ComputerPlayer player = new ComputerPlayer();
 		ComputerPlayer player2 = new ComputerPlayer();
@@ -307,6 +319,7 @@ public class GameActionsTest {
 	
 	@Test
 	public void computerSuggestion() {
+		//Make sure the computerPlayer "intelligently" makes a suggestion with cards not yet seen.
 		ComputerPlayer computerPlayer = new ComputerPlayer();
 		
 		computerPlayer.updateSeen(peacockCard);

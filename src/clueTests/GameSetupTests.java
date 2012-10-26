@@ -101,7 +101,7 @@ public class GameSetupTests {
 	
 	@Test
 	public void checkDeal() {
-		//Check that all cards are dealed evenly.
+		//Check that all cards are dealt evenly.
 		ArrayList<ComputerPlayer> computerPlayers = board.getComputerPlayers();
 		HumanPlayer humanPlayer = board.getHumanPlayer();
 		ArrayList<Card> cards = humanPlayer.getCards();
