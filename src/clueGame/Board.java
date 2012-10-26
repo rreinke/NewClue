@@ -27,6 +27,7 @@ public class Board {
 
 	// Variables
 	private ArrayList<ComputerPlayer> computerPlayers;
+	private Player currentPlayer;
 	//In case we ever want more than one human player
 	private ArrayList<HumanPlayer> humanPlayer;
 	private ArrayList<Card> cards;
@@ -45,6 +46,7 @@ public class Board {
 	// Constructor
 	public Board() {
 		computerPlayers = new ArrayList<ComputerPlayer>();
+		currentPlayer = new HumanPlayer(); // new ComputerPlayer();
 		humanPlayer = new ArrayList<HumanPlayer>();
 		cards = new ArrayList<Card>();
 		cells = new ArrayList<BoardCell>();
