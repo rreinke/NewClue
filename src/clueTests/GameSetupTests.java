@@ -27,11 +27,13 @@ public class GameSetupTests {
 	
 	@Test
 	public void checkPlayers() {
+		//Make sure the human player is assigned name, color, and location correctly.
 		Player player = board.getHumanPlayer();
 		Assert.assertEquals("Mrs. Peacock", player.getName());
 		Assert.assertEquals(Color.BLUE, player.getColor());
 		Assert.assertEquals(new WalkwayCell(4,0), player.getCurrentLocation());
 		
+		//Make sure the other five computer players are assigned name, color, and location correctly.
 		player = board.getComputerPlayer(0);
 		Assert.assertEquals("Colonel Mustard", player.getName());
 		Assert.assertEquals(Color.YELLOW, player.getColor());
@@ -41,6 +43,21 @@ public class GameSetupTests {
 		Assert.assertEquals("Professor Plum", player.getName());
 		Assert.assertEquals(Color.PINK, player.getColor());
 		Assert.assertEquals(new WalkwayCell(15,4), player.getCurrentLocation());
+		
+		player = board.getComputerPlayer(3);
+		Assert.assertEquals("Mrs. White", player.getName());
+		Assert.assertEquals(Color.WHITE, player.getColor());
+		Assert.assertEquals(new WalkwayCell(0,12), player.getCurrentLocation());
+		
+		player = board.getComputerPlayer(1);
+		Assert.assertEquals("Mr. Green", player.getName());
+		Assert.assertEquals(Color.GREEN, player.getColor());
+		Assert.assertEquals(new WalkwayCell(10, 16), player.getCurrentLocation());
+		
+		player = board.getComputerPlayer(2);
+		Assert.assertEquals("Miss Scarlet", player.getName());
+		Assert.assertEquals(Color.RED, player.getColor());
+		Assert.assertEquals(new WalkwayCell(15, 11), player.getCurrentLocation());
 	}
 
 	@Test
@@ -53,6 +70,7 @@ public class GameSetupTests {
 		
 		testCards = board.getCards();
 		
+		//Make sure all cards are initialized.
 		for (Card c : testCards)
 		{
 			if (c.getCardType() == CardType.PERSON)
@@ -69,6 +87,7 @@ public class GameSetupTests {
 			}
 		}
 		
+		//Test correct number of cards, rooms, weapons, and people.
 		Assert.assertEquals(26, testCards.size());
 		Assert.assertEquals(10, roomCards);
 		Assert.assertEquals(10, weaponCards);
@@ -76,10 +95,13 @@ public class GameSetupTests {
 		Assert.assertTrue(testCards.contains(new Card("Mrs. Peacock", CardType.PERSON)));
 		Assert.assertTrue(testCards.contains(new Card("Candlestick", CardType.WEAPON)));
 		Assert.assertTrue(testCards.contains(new Card("Green Center", CardType.ROOM)));
+		Assert.assertTrue(testCards.contains(new Card("Meyer", CardType.ROOM)));
+		Assert.assertTrue(testCards.contains(new Card("Miss Scarlet", CardType.PERSON)));
 	}
 	
 	@Test
 	public void checkDeal() {
+		//Check that all cards are dealed evenly.
 		ArrayList<ComputerPlayer> computerPlayers = board.getComputerPlayers();
 		HumanPlayer humanPlayer = board.getHumanPlayer();
 		ArrayList<Card> cards = humanPlayer.getCards();
