@@ -37,9 +37,9 @@ public class Card {
 		return;
 	}
 	
-	public boolean equals(Card cardToCompare)
+	public boolean equals(Object cardToCompare)
 	{
-		if (cardToCompare.name.equals(this.name) && cardToCompare.cardType.equals(this.cardType))
+		if (((Card)cardToCompare).name.equals(this.name) && ((Card)cardToCompare).cardType.equals(this.cardType))
 		{
 			return true;
 		}

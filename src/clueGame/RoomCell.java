@@ -6,12 +6,14 @@ public class RoomCell extends BoardCell {
 	}
 	private DoorDirection doorDirection;
 	private char roomInitial;
+	private String roomName;
 	
-	public RoomCell(String symbol, int row, int col){
+	public RoomCell(String symbol, String roomName, int row, int col){
 		this.row = row;
 		this.col = col;
 		this.roomInitial = symbol.charAt(0);
 		this.cellType = symbol.charAt(0);
+		this.roomName = roomName;
 		char temp;
 		
 		if (symbol.length() > 1)
@@ -69,5 +71,9 @@ public class RoomCell extends BoardCell {
 	
 	public char getInitial(){
 		return roomInitial;
+	}
+	
+	public String getRoomName() {
+		return roomName;
 	}
 }

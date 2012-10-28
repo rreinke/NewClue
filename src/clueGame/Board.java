@@ -11,13 +11,17 @@
  */
 package clueGame;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -42,6 +46,8 @@ public class Board {
 	// Change names to load the respective files
 	private final String legend = "~/../legend.csv";
 	private final String layout = "~/../clue_board.csv";
+	private final String WEAPON_FILE = "~/../Weapons.csv";
+	private final String PLAYER_FILE = "~/../Player.csv";
 	
 	// Constructor
 	public Board() {
@@ -54,6 +60,9 @@ public class Board {
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
 		loadConfigFiles();
+		loadPlayers();
+		loadWeapons();
+		initRoomCards();
 		calcAdjacencies();
 		deal();
 		seen = new boolean[cells.size()];
@@ -112,7 +121,7 @@ public class Board {
 					if(rooms.get(i.charAt(0)).equals("Walkway")){
 						cells.add(new WalkwayCell(numRows,numColumns));
 					} else {
-						cells.add(new RoomCell(i,numRows,numColumns));
+						cells.add(new RoomCell(i,rooms.get(i.charAt(0)),numRows,numColumns));
 					}
 				}
 			}
@@ -133,7 +142,114 @@ public class Board {
 			return;
 		}
 	}
+	
+	public void loadPlayers()
+	{
+		try {
+			Scanner scan = new Scanner (new FileReader(PLAYER_FILE));
+			String inputLine;
+			
+			while (scan.hasNext())
+			{
+				inputLine = scan.nextLine();
+				
+				String [] personConfig = inputLine.split(",");
+				
+				try {
+					
+					if (personConfig.length == 4)
+					{
+						String name = personConfig[0];
+						Color color = convertColor(personConfig[1]);
+						int startRow = Integer.parseInt(personConfig[2]);
+						int startCol = Integer.parseInt(personConfig[3]);
+						
+						if (color == null)
+						{
+							throw new BadConfigFormatException("ERROR: One or more players in " + PLAYER_FILE + " had an invalid color!");
+						}
+						
+						if (this.getBoardCellAt(this.calcIndex(startRow, startCol)).isWalkway())
+						{
+							cards.add(new Card(name, CardType.PERSON));
+							
+							if (humanPlayer.isEmpty())
+							{
+								humanPlayer.add(new HumanPlayer(name, color, (WalkwayCell)this.getBoardCellAt(this.calcIndex(startRow, startCol))));
+							}
+							else
+							{
+								computerPlayers.add(new ComputerPlayer(name, color, (WalkwayCell)this.getBoardCellAt(this.calcIndex(startRow, startCol))));
+							}
+						}
+						else
+						{
+							throw new BadConfigFormatException("ERROR: The starting location for all players must be a walkway cell!");
+						}
+					}
+					else
+					{
+						throw new BadConfigFormatException("ERROR: One or more rows in " + PLAYER_FILE + " had the incorrect number of columns!");
+					}
+				}
+				catch (NumberFormatException ex)
+				{
+					System.out.println("ERROR: Non-numeric row or column detected in " + PLAYER_FILE);
+				}
+				catch (BadConfigFormatException ex)
+				{
+					System.out.println(ex.toString());
+				}
+			}
+		}
+		catch (FileNotFoundException ex) {
+			System.out.println(PLAYER_FILE + " could not be found!");
+		}
+	}
 
+	public void loadWeapons()
+	{
+		try {
+			Scanner scan = new Scanner(new FileReader(WEAPON_FILE));
+			String inputLine;
+			
+			while (scan.hasNext())
+			{
+				inputLine = scan.nextLine();
+				
+				if (inputLine.length() > 1)
+				{
+					cards.add(new Card(inputLine, CardType.WEAPON));
+				}
+				else
+				{
+					throw new BadConfigFormatException("ERROR: Invalid weapon in " + WEAPON_FILE);
+				}
+			}
+		}
+		catch (FileNotFoundException ex)
+		{
+			System.out.println(WEAPON_FILE + " could not be found!");
+		}
+		catch (BadConfigFormatException ex)
+		{
+			System.out.println(ex.toString());
+		}
+	}
+	
+	public void initRoomCards()
+	{
+		Collection<String> localRooms = rooms.values();
+		
+		for (String s : localRooms)
+		{
+			if (!(s.equals("Kafadar")))
+			{
+				cards.add(new Card(s, CardType.ROOM));
+			}
+		}
+	}
+	
 	public int calcIndex(int row, int col) {
 		return row*numColumns+col;
 	}
@@ -143,7 +259,7 @@ public class Board {
 	 */
 	public ComputerPlayer getComputerPlayer(int index)
 	{
-		return new ComputerPlayer();
+		return computerPlayers.get(index);
 	}
 	
 	public ArrayList<ComputerPlayer> getComputerPlayers()
@@ -153,7 +269,7 @@ public class Board {
 	
 	public HumanPlayer getHumanPlayer()
 	{
-		return new HumanPlayer();
+		return humanPlayer.get(0);
 	}
 	
 	public ArrayList<Card> getCards()
@@ -311,22 +427,130 @@ public class Board {
 	
 	public void deal()
 	{
+		Random rand = new Random();
+		ArrayList<Card> Rooms = new ArrayList<Card>();
+		ArrayList<Card> People = new ArrayList<Card>();
+		ArrayList<Card> Weapons = new ArrayList<Card>();
+		ArrayList<Card> remainingCards = new ArrayList<Card>();
+		Card room;
+		Card person;
+		Card weapon;
+		int randIndex;
+		int playerIndex = -1;
+		
+		for (Card c : cards)
+		{
+			if (c.getCardType() == CardType.ROOM)
+			{
+				Rooms.add(c);
+			}
+			else if (c.getCardType() == CardType.PERSON)
+			{
+				People.add(c);
+			}
+			else
+			{
+				Weapons.add(c);
+			}
+		}
+		
+		randIndex = rand.nextInt(Rooms.size());
+		room = Rooms.get(randIndex);
+		Rooms.remove(randIndex);
+		
+		randIndex = rand.nextInt(People.size());
+		person = People.get(randIndex);
+		People.remove(randIndex);
+		
+		randIndex = rand.nextInt(Weapons.size());
+		weapon = Weapons.get(randIndex);
+		Weapons.remove(randIndex);
+		
+		solution = new Solution(person, weapon, room);
+		
+		remainingCards.addAll(Rooms);
+		remainingCards.addAll(Weapons);
+		remainingCards.addAll(People);
+		
+		while (!remainingCards.isEmpty())
+		{
+			randIndex = rand.nextInt(remainingCards.size());
+			
+			if (playerIndex == -1)
+			{
+				humanPlayer.get(0).addCard(remainingCards.get(randIndex));	
+				playerIndex = 0;
+			}
+			else 
+			{
+				computerPlayers.get(playerIndex).addCard(remainingCards.get(randIndex));
+				playerIndex = ++playerIndex % computerPlayers.size();
+				
+				if (playerIndex == 0)
+				{
+					playerIndex = -1;
+				}
+			}
+			
+			remainingCards.remove(randIndex);
+		}
+		
 		return;
 	}
 	
 	public boolean checkAccusation(Card person, Card weapon, Card room)
 	{
+		Solution tempSolution = new Solution(person, weapon, room);
+		
+		if (tempSolution.getPerson().equals(solution.getPerson()) && 
+				tempSolution.getWeapon().equals(solution.getWeapon()) &&
+				tempSolution.getRoom().equals(solution.getRoom()))
+		{
+			return true;
+		}
 		return false;
 	}
 	
-	public Card handleSuggestion(Card person, Card weapon, Card room)
+	public Card handleSuggestion(Card person, Card room, Card weapon)
 	{
-		return new Card ("???", CardType.PERSON);
+		ArrayList<Card> disproveCards = new ArrayList<Card>();
+		Random rand = new Random();
+		
+		for (Player p : computerPlayers)
+		{
+			disproveCards.addAll(p.disproveSuggestion(person, room, weapon));
+		}
+		
+		for (Player p : humanPlayer)
+		{
+			disproveCards.addAll(p.disproveSuggestion(person, room, weapon));
+		}
+		
+		disproveCards.removeAll(currentPlayer.getCards());
+		
+		if (disproveCards.size() > 0)
+		{
+			return disproveCards.get(rand.nextInt(disproveCards.size()));
+		}
+		return null;
 	}
 	
 	public void selectAnswer()
 	{
 		return;
+	}
+	
+    // Be sure to trim the color, we don't want spaces around the name
+	public Color convertColor(String strColor) {
+		Color color; 
+		try {     
+			// We can use reflection to convert the string to a color
+			Field field = Class.forName("java.awt.Color").getField(strColor.trim());     
+			color = (Color)field.get(null); } 
+		catch (Exception e) {  
+			color = null; // Not defined } 
+		}
+		return color;
 	}
 	
 	//This is for testing purposes only and should not be called anywhere in the game play	
@@ -355,7 +579,7 @@ public class Board {
 	//This is for testing purposes only and should not be called anywhere in the game play
 	public void setCurrentPlayer (Player player)
 	{
-		this.currentPlayer = currentPlayer;
+		this.currentPlayer = player;
 	}
 }
 

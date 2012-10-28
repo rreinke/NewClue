@@ -20,7 +20,6 @@ import clueGame.Card;
 import clueGame.Card.CardType;
 import clueGame.ComputerPlayer;
 import clueGame.HumanPlayer;
-import clueGame.Player;
 import clueGame.RoomCell;
 import clueGame.Solution;
 import clueGame.WalkwayCell;
@@ -78,7 +77,7 @@ public class GameActionsTest {
 		
 		Set<BoardCell> rooms = new HashSet<BoardCell>();
 		
-		rooms.add(new RoomCell("KU",1,1));
+		rooms.add(new RoomCell("KU","Kafadar",1,1));
 		rooms.add(new WalkwayCell(0,0));
 		rooms.add(new WalkwayCell(1,2));
 		rooms.add(new WalkwayCell(2,1));
@@ -108,11 +107,11 @@ public class GameActionsTest {
 			{
 				loc0_12++;
 			}
-			else if (picked == board.getCellAt(board.calcIndex(14, 2)))
+			else if (picked == board.getCellAt(board.calcIndex(2, 12)))
 			{
 				loc2_12++;
 			}
-			else if (picked == board.getCellAt(board.calcIndex(15, 1)))
+			else if (picked == board.getCellAt(board.calcIndex(3, 11)))
 			{
 				loc3_11++;
 			}
@@ -193,9 +192,9 @@ public class GameActionsTest {
 		board.setCurrentPlayer(human);
 		
 		Assert.assertEquals(null, board.handleSuggestion(person, room, weapon));
-		Assert.assertEquals(revolverCard, board.handleSuggestion(person, room, revolverCard));
-		Assert.assertEquals(meyerCard, board.handleSuggestion(person, meyerCard, weapon));
-		Assert.assertEquals(mustardCard, board.handleSuggestion(mustardCard, room, weapon));
+		Assert.assertTrue(board.handleSuggestion(person, room, revolverCard).equals(revolverCard));
+		Assert.assertTrue(board.handleSuggestion(person, meyerCard, weapon).equals(meyerCard));
+		Assert.assertTrue(board.handleSuggestion(mustardCard, room, weapon).equals(mustardCard));
 	}
 	
 	@Test
@@ -205,9 +204,6 @@ public class GameActionsTest {
 		HumanPlayer human = new HumanPlayer();
 		ComputerPlayer player = new ComputerPlayer();
 		ArrayList<ComputerPlayer> computerPlayers = new ArrayList<ComputerPlayer>();
-		Card room = new Card ("Stratton", CardType.ROOM);
-		Card weapon = new Card ("Candlestick", CardType.WEAPON);
-		Card person = new Card ("Mr. Green", CardType.PERSON);
 		int roomCount = 0;
 		int weaponCount = 0;
 		int personCount = 0;
@@ -226,7 +222,7 @@ public class GameActionsTest {
 		
 		for (int i=0; i<100; i++)
 		{
-			Card temp = human.disproveSuggestion(peacockCard, greenCenterCard, ropeCard);
+			Card temp = board.handleSuggestion(peacockCard, greenCenterCard, ropeCard);
 			
 			if (temp.equals(peacockCard))
 			{
@@ -289,7 +285,7 @@ public class GameActionsTest {
 		//These are the tests for the computer player suggestions
 		board.setCurrentPlayer(player);
 		
-		Assert.assertEquals(peacockCard, board.handleSuggestion(peacockCard, room, weapon));
+		Assert.assertTrue(board.handleSuggestion(peacockCard, room, weapon).equals(peacockCard));
 		Assert.assertEquals(null, board.handleSuggestion(mustardCard, room, weapon));
 		
 		//The rest of the tests are for the human
@@ -340,12 +336,17 @@ public class GameActionsTest {
 		computerPlayer.updateSeen(meyerCard);
 		
 		computerPlayer.setCurrentLocation(board.getRoomCellAt(7,3));
-		computerPlayer.createSuggestion();
 		
-		Assert.assertEquals(new Card("Alderson", CardType.ROOM), computerPlayer.getSuggestedRoom());
-		Assert.assertFalse(computerPlayer.getSeenCards().contains(peacockCard));
-		Assert.assertFalse(computerPlayer.getSeenCards().contains(mustardCard));
-		Assert.assertFalse(computerPlayer.getSeenCards().contains(ropeCard));
-		Assert.assertFalse(computerPlayer.getSeenCards().contains(revolverCard));
+		//We want to test this multiple times to make sure that we don't get lucky
+		for (int i=0; i<100; i++)
+		{
+			computerPlayer.createSuggestion(board.getCards());
+			
+			Assert.assertEquals(new Card("Alderson", CardType.ROOM), computerPlayer.getSuggestedRoom());
+			Assert.assertFalse(computerPlayer.getSuggestedPerson().equals(peacockCard));
+			Assert.assertFalse(computerPlayer.getSuggestedPerson().equals(mustardCard));
+			Assert.assertFalse(computerPlayer.getSuggestedWeapon().equals(ropeCard));
+			Assert.assertFalse(computerPlayer.getSuggestedWeapon().equals(revolverCard));
+		}
 	}
 }

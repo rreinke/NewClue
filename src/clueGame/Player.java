@@ -3,14 +3,12 @@ package clueGame;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import clueGame.Card.CardType;
-
 public abstract class Player {
 
 	private String name;
 	private ArrayList<Card> cards;
 	private Color color;
-	private BoardCell currentLocation;
+	protected BoardCell currentLocation;
 	
 	public Player() {
 		// TODO Auto-generated constructor stub
@@ -57,8 +55,23 @@ public abstract class Player {
 		cards.add(card);
 	}
 	
-	public Card disproveSuggestion(Card person, Card room, Card weapon)
+	public ArrayList<Card> disproveSuggestion(Card person, Card room, Card weapon)
 	{
-		return new Card("???", CardType.PERSON);
+		ArrayList<Card> disproven = new ArrayList<Card>();
+		
+		if (cards.contains(person))
+		{
+			disproven.add(person);
+		}
+		if (cards.contains(room))
+		{
+			disproven.add(room);
+		}
+		if (cards.contains(weapon))
+		{
+			disproven.add(weapon);
+		}
+		
+		return disproven;
 	}
 }
