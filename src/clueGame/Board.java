@@ -507,6 +507,7 @@ public class Board {
 		return;
 	}
 	
+	//Returns true if all three cards in the accusation match the solution, false otherwise.
 	public boolean checkAccusation(Card person, Card weapon, Card room)
 	{
 		Solution tempSolution = new Solution(person, weapon, room);
@@ -520,6 +521,7 @@ public class Board {
 		return false;
 	}
 	
+	//Randomly show a card that one of the computer players has to disprove a suggestion.
 	public Card handleSuggestion(Card person, Card room, Card weapon)
 	{
 		ArrayList<Card> disproveCards = new ArrayList<Card>();
@@ -535,6 +537,7 @@ public class Board {
 			disproveCards.addAll(p.disproveSuggestion(person, room, weapon));
 		}
 		
+		//Make sure none of currentPlayer's cards are shown to disprove the suggestion.
 		disproveCards.removeAll(currentPlayer.getCards());
 		
 		if (disproveCards.size() > 0)
