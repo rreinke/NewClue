@@ -156,7 +156,8 @@ public class Board {
 				String [] personConfig = inputLine.split(",");
 				
 				try {
-					
+					//Make sure the correct amount of information is given for each player.
+					//This includes name, color, and starting row and column.
 					if (personConfig.length == 4)
 					{
 						String name = personConfig[0];
@@ -173,6 +174,7 @@ public class Board {
 						{
 							cards.add(new Card(name, CardType.PERSON));
 							
+							//Only one human player.
 							if (humanPlayer.isEmpty())
 							{
 								humanPlayer.add(new HumanPlayer(name, color, (WalkwayCell)this.getBoardCellAt(this.calcIndex(startRow, startCol))));
@@ -207,6 +209,7 @@ public class Board {
 		}
 	}
 
+	//Load and store all of the weapons as long as they are more than one character long.
 	public void loadWeapons()
 	{
 		try {
@@ -237,6 +240,7 @@ public class Board {
 		}
 	}
 	
+	//Initialize each of the rooms as a card.
 	public void initRoomCards()
 	{
 		Collection<String> localRooms = rooms.values();
@@ -250,6 +254,7 @@ public class Board {
 		}
 	}
 	
+	//Calculate the index of a given row and column.
 	public int calcIndex(int row, int col) {
 		return row*numColumns+col;
 	}
@@ -277,6 +282,7 @@ public class Board {
 		return cards;
 	}
 	
+	//Returns null if index is not a room.
 	public RoomCell getRoomCellAt(int row, int col){
 		if(cells.get(calcIndex(row,col)).isRoom()){
 			RoomCell temp = (RoomCell) cells.get(calcIndex(row,col));
@@ -438,6 +444,7 @@ public class Board {
 		int randIndex;
 		int playerIndex = -1;
 		
+		//Place each card in its respective category of person, room, or weapon.
 		for (Card c : cards)
 		{
 			if (c.getCardType() == CardType.ROOM)
@@ -454,6 +461,8 @@ public class Board {
 			}
 		}
 		
+		/*Randomly select one card from the rooms, one from players, and one from weapons and store
+		as the solution*/
 		randIndex = rand.nextInt(Rooms.size());
 		room = Rooms.get(randIndex);
 		Rooms.remove(randIndex);
@@ -498,6 +507,7 @@ public class Board {
 		return;
 	}
 	
+	//Returns true if all three cards in the accusation match the solution, false otherwise.
 	public boolean checkAccusation(Card person, Card weapon, Card room)
 	{
 		Solution tempSolution = new Solution(person, weapon, room);
@@ -511,6 +521,7 @@ public class Board {
 		return false;
 	}
 	
+	//Randomly show a card that one of the computer players has to disprove a suggestion.
 	public Card handleSuggestion(Card person, Card room, Card weapon)
 	{
 		ArrayList<Card> disproveCards = new ArrayList<Card>();
@@ -526,6 +537,7 @@ public class Board {
 			disproveCards.addAll(p.disproveSuggestion(person, room, weapon));
 		}
 		
+		//Make sure none of currentPlayer's cards are shown to disprove the suggestion.
 		disproveCards.removeAll(currentPlayer.getCards());
 		
 		if (disproveCards.size() > 0)
