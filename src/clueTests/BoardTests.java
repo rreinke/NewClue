@@ -34,7 +34,7 @@ public class BoardTests {
 		assertEquals("Alderson", testRooms.get('A'));
 		assertEquals("Stratton", testRooms.get('S'));
 		assertEquals("Walkway", testRooms.get('W'));
-		assertEquals("Kafadar", testRooms.get('K'));
+		assertEquals("Kafadar", testRooms.get('X'));
 	}
 	
 	@Test
