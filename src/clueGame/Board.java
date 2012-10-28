@@ -294,12 +294,8 @@ public class Board {
 	public ArrayList<BoardCell> getCells(){
 		return cells;
 	}
-
-	public BoardCell getBoardCellAt(int i){
-		return cells.get(i);
-	}
 	
-	public BoardCell getCellAt(int i){
+	public BoardCell getBoardCellAt(int i){
 		return cells.get(i);
 	}
 
