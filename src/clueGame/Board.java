@@ -47,10 +47,10 @@ public class Board extends JPanel {
 	private Set<BoardCell> targets;
 	private boolean[] seen; 
 	// Change names to load the respective files
-	private final String legend = "~/../legend.csv";
-	private final String layout = "~/../clue_board.csv";
-	private final String WEAPON_FILE = "~/../Weapons.csv";
-	private final String PLAYER_FILE = "~/../Player.csv";
+	private final String legend = "src/legend.csv";
+	private final String layout = "src/clue_board.csv";
+	private final String WEAPON_FILE = "src/Weapons.csv";
+	private final String PLAYER_FILE = "src/Player.csv";
 	
 	// Constructor
 	public Board() {

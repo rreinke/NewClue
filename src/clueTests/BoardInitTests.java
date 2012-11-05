@@ -70,7 +70,7 @@ public class BoardInitTests {
 		room = board.getRoomCellAt(0, 0);
 		assertFalse(room.isDoorway());	
 		// Test that walkways are not doors
-		BoardCell cell = board.getCellAt(board.calcIndex(0, 6));
+		BoardCell cell = board.getBoardCellAt(board.calcIndex(0, 6));
 		assertFalse(cell.isDoorway());		
 
 	}
@@ -84,7 +84,7 @@ public class BoardInitTests {
 		Assert.assertEquals(506, totalCells);
 		for (int i=0; i<totalCells; i++)
 		{
-			BoardCell cell = board.getCellAt(i);
+			BoardCell cell = board.getBoardCellAt(i);
 			if (cell.isDoorway())
 				numDoors++;
 		}
