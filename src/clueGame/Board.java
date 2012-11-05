@@ -12,6 +12,7 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -25,9 +26,11 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JPanel;
+
 import clueGame.Card.CardType;
 
-public class Board {
+public class Board extends JPanel {
 
 	// Variables
 	private ArrayList<ComputerPlayer> computerPlayers;
@@ -588,6 +591,11 @@ public class Board {
 	public void setCurrentPlayer (Player player)
 	{
 		this.currentPlayer = player;
+	}
+	
+	public void paintComponent(Graphics g, BoardCell cell) {
+		super.paintComponent(g);
+		cell.draw(g, this);
 	}
 }
 

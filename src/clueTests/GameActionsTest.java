@@ -103,15 +103,15 @@ public class GameActionsTest {
 		for (int i=0; i<100; i++) 
 		{
 			BoardCell picked = player.pickLocation(board.getTargets());
-			if (picked == board.getCellAt(board.calcIndex(0, 12)))
+			if (picked == board.getBoardCellAt(board.calcIndex(0, 12)))
 			{
 				loc0_12++;
 			}
-			else if (picked == board.getCellAt(board.calcIndex(2, 12)))
+			else if (picked == board.getBoardCellAt(board.calcIndex(2, 12)))
 			{
 				loc2_12++;
 			}
-			else if (picked == board.getCellAt(board.calcIndex(3, 11)))
+			else if (picked == board.getBoardCellAt(board.calcIndex(3, 11)))
 			{
 				loc3_11++;
 			}
@@ -142,15 +142,15 @@ public class GameActionsTest {
 		for (int i=0; i<100; i++) 
 		{			
 			BoardCell picked = player.pickLocation(board.getTargets());
-			if (picked == board.getCellAt(board.calcIndex(15, 13)))
+			if (picked == board.getBoardCellAt(board.calcIndex(15, 13)))
 			{
 				loc15_13++;
 			}
-			else if (picked == board.getCellAt(board.calcIndex(13, 11)))
+			else if (picked == board.getBoardCellAt(board.calcIndex(13, 11)))
 			{
 				loc13_11++;
 			}
-			else if (picked == board.getCellAt(board.calcIndex(14, 12)))
+			else if (picked == board.getBoardCellAt(board.calcIndex(14, 12)))
 			{
 				loc14_12++;
 			}
