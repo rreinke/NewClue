@@ -25,8 +25,12 @@ public class ClueGame extends JFrame {
 	
 	public ClueGame() {
 		setTitle("Clue");
+<<<<<<< HEAD
 		setSize(680,680);
 		setResizable(false);
+=======
+		setSize(300, 300);
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 		add(b, BorderLayout.CENTER);
 		Animation anim = new Animation();
 		add(anim);
@@ -44,6 +48,7 @@ public class ClueGame extends JFrame {
 	}
 
 	private JMenuItem createFileItem(String name) {
+<<<<<<< HEAD
 		JMenuItem newItem = new JMenuItem(name);
 		if(name.equals("Exit"))
 		{
@@ -54,6 +59,18 @@ public class ClueGame extends JFrame {
 		}
 		
 		return newItem;
+=======
+		JMenuItem exitItem = new JMenuItem(name);
+		if(name.equals("Exit"))
+		{
+			exitItem.addActionListener(new ExitItemListener());
+		} else if (name.equals("Detective Notes"))
+		{
+			exitItem.addActionListener(new NotesItemListener());
+		}
+		
+		return exitItem;
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 	}
 	
 	private class ExitItemListener implements ActionListener {
@@ -83,6 +100,7 @@ public class ClueGame extends JFrame {
 			JPanel guesses = new JPanel();
 			//The guesses panel must have panel each for the person, room, and weapon guess
 			JPanel personGuess = new JPanel();
+<<<<<<< HEAD
 			JPanel roomGuess = new JPanel();
 			JPanel weaponGuess = new JPanel();
 			guesses.setLayout(new GridLayout(3, 1));
@@ -93,13 +111,22 @@ public class ClueGame extends JFrame {
 			JComboBox<String> room = new JComboBox<String>();
 			JComboBox<String> weapon = new JComboBox<String>();
 			//ArrayList<JCheckBox> cbPlayers = new ArrayList<JCheckBox>();
+=======
+			guesses.setLayout(new GridLayout(3, 1));
+			guesses.add(personGuess);
+			//JComboBox person = new JComboBox();
+			//personGuess.add();
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 			
 			//Create the people check boxes on the people panel
 			ArrayList<ComputerPlayer> cplayers = b.getComputerPlayers();
 			HumanPlayer hplayer = b.getHumanPlayer();
 			for(ComputerPlayer cp : cplayers) {
 				people.add(new JCheckBox(cp.getName()));
+<<<<<<< HEAD
 				person.addItem(cp.getName());
+=======
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 			}
 			people.add(new JCheckBox(hplayer.getName()));
 			people.setLayout(new GridLayout(3, 2));
@@ -112,7 +139,10 @@ public class ClueGame extends JFrame {
 			Set<Character>roomChars = roomList.keySet();
 			for(char rc : roomChars) {
 				rooms.add(new JCheckBox(roomList.get(rc)));
+<<<<<<< HEAD
 				room.addItem(roomList.get(rc));
+=======
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 			}
 			rooms.setLayout(new GridLayout(5, 2));
 			rooms.setBorder(new TitledBorder(new EtchedBorder(), "Rooms"));
@@ -124,11 +154,15 @@ public class ClueGame extends JFrame {
 			for(Card c : cards) {
 				if(c.getCardType().equals(CardType.WEAPON)) {
 					weapons.add(new JCheckBox(c.getName()));
+<<<<<<< HEAD
 					weapon.addItem(c.getName());
+=======
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 				}
 			}
 			weapons.setLayout(new GridLayout(3, 2));
 			weapons.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
+<<<<<<< HEAD
 			
 			personGuess.add(person);
 			personGuess.setBorder(new TitledBorder(new EtchedBorder(), "Person"));
@@ -138,6 +172,9 @@ public class ClueGame extends JFrame {
 			weaponGuess.setBorder(new TitledBorder(new EtchedBorder(), "Weapons"));
 			det.add(cardOptions);
 			det.add(guesses);
+=======
+			det.add(cardOptions);
+>>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 			det.setVisible(true);
 		}
 	}
