@@ -2,7 +2,6 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-<<<<<<< HEAD
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -56,16 +55,4 @@ public class Animation extends JPanel {
 	}
 	
 
-=======
-
-import javax.swing.JPanel;
-
-public class Animation extends JPanel {
-
-	public void paintComponents(Graphics g, BoardCell cell)
-	{
-		super.paintComponent(g);
-		//cell.draw(g, b);
-	}
->>>>>>> 7b55c34fa3a6cfdab2bba7902a6ce6aeb1ad0b25
 }
