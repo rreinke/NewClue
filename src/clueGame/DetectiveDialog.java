@@ -34,16 +34,15 @@ public class DetectiveDialog extends JDialog {
 		JPanel guesses = new JPanel();
 		//The guesses panel must have panel each for the person, room, and weapon guess
 		JPanel personGuess = new JPanel();
-
 		JPanel roomGuess = new JPanel();
 		JPanel weaponGuess = new JPanel();
 		guesses.setLayout(new GridLayout(3, 1));
 		guesses.add(personGuess);
 		guesses.add(roomGuess);
 		guesses.add(weaponGuess);
-		JComboBox<String> person = new JComboBox<String>();
-		JComboBox<String> room = new JComboBox<String>();
-		JComboBox<String> weapon = new JComboBox<String>();
+		JComboBox person = new JComboBox();
+		JComboBox room = new JComboBox();
+		JComboBox weapon = new JComboBox();
 		
 		//Create the people check boxes on the people panel
 		ArrayList<ComputerPlayer> cplayers = b.getComputerPlayers();
@@ -51,7 +50,6 @@ public class DetectiveDialog extends JDialog {
 		for(ComputerPlayer cp : cplayers) {
 			people.add(new JCheckBox(cp.getName()));
 			person.addItem(cp.getName());
-
 		}
 		people.add(new JCheckBox(hplayer.getName()));
 		people.setLayout(new GridLayout(3, 2));
