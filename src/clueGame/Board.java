@@ -262,6 +262,15 @@ public class Board extends JPanel {
 		return row*numColumns+col;
 	}
 
+	// ---Get Board Cell Row---
+	public int getRow(int indx, int BoardCols) {
+		return (int) (indx / BoardCols);
+	}
+
+	// ---Get Board Cell Column---
+	public int getColumn(int indx, int BoardCols) {
+		return indx % BoardCols;
+	}
 	/*
 	 * Name is self explanatory
 	 */

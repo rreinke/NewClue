@@ -41,9 +41,9 @@ public class DetectiveDialog extends JDialog {
 		guesses.add(personGuess);
 		guesses.add(roomGuess);
 		guesses.add(weaponGuess);
-		JComboBox<String> person = new JComboBox<String>();
-		JComboBox<String> room = new JComboBox<String>();
-		JComboBox<String> weapon = new JComboBox<String>();
+		JComboBox person = new JComboBox();
+		JComboBox room = new JComboBox();
+		JComboBox weapon = new JComboBox();
 		
 		//Create the people check boxes on the people panel
 		ArrayList<ComputerPlayer> cplayers = b.getComputerPlayers();

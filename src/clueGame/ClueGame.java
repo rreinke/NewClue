@@ -26,7 +26,7 @@ public class ClueGame extends JFrame {
 	
 	public ClueGame() {
 		setTitle("Clue");
-		setSize(680,680);
+		setSize(680,685);
 		setResizable(false);
 		add(b, BorderLayout.CENTER);
 		Animation anim = new Animation();
