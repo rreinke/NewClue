@@ -7,8 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
-
+import javax.swing.Timer;
 import javax.swing.border.*;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -28,19 +29,34 @@ public class ClueGame extends JFrame {
 		setTitle("Clue");
 		setSize(680,685);
 		setResizable(false);
-		add(b, BorderLayout.CENTER);
+		//add(b, BorderLayout.CENTER);
 		Animation anim = new Animation();
-		add(anim);
+		add(anim, BorderLayout.CENTER);	
 
 		JMenuBar menu = new JMenuBar();
 		setJMenuBar(menu);
 		menu.add(createFileMenu());
 	}
 
+	/*public void updateDrawing() {
+		Timer t = new Timer(1000, new TimerListener());
+		t.start();
+	}*/
+	
+	/*private class TimerListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			repaint();
+		}
+		
+	}*/
+	
 	private JMenu createFileMenu() {
 		JMenu menu = new JMenu("File");
-		menu.add(createFileItem("Exit"));
 		menu.add(createFileItem("Detective Notes"));
+		menu.add(createFileItem("Exit"));
 		return menu;
 	}
 
@@ -80,5 +96,6 @@ public class ClueGame extends JFrame {
 		ClueGame cg = new ClueGame();
 		cg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cg.setVisible(true);
+		//cg.updateDrawing();
 	}
 }

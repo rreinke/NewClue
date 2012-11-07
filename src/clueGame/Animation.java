@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+
 import javax.swing.JPanel;
 
 import clueGame.RoomCell.DoorDirection;
@@ -14,8 +15,13 @@ import clueGame.RoomCell.DoorDirection;
 public class Animation extends JPanel {
 	Board b = new Board();
 	static final int SIDE = 40;
-	int x = 0;
-	int y = 0;
+	private int x;
+	private int y;
+	
+	public Animation() {
+		x = 0;
+		y = 0;
+	}
 	
 	
 	//@Override
@@ -25,7 +31,9 @@ public class Animation extends JPanel {
 		ArrayList<ComputerPlayer> cPlayers = b.getComputerPlayers();
 		HumanPlayer hPlayer = b.getHumanPlayer();
 		int col = b.getNumColumns();
+		System.out.println("Columns: " + col);
 		int row = b.getNumRows();
+
 		int counter = 0;
 		Map<Character,String> rooms = b.getRooms();
 		Map<Character,Boolean> drawName = new HashMap<Character, Boolean>();
@@ -93,12 +101,12 @@ public class Animation extends JPanel {
 					}
 				}
 				x+=SIDE;
+				System.out.println("X: " + x);
 			}
 			y+=SIDE;
+			System.out.println("Y: " + y);
 		}
 		
 		
 	}
-	
-
 }
