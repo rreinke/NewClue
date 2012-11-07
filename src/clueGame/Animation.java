@@ -3,6 +3,7 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import javax.swing.JPanel;
 
@@ -11,15 +12,22 @@ import clueGame.RoomCell.DoorDirection;
 public class Animation extends JPanel {
 	Board b = new Board();
 	static final int SIDE = 40;
-	int x = 0;
-	int y = 0;
+	private int x;
+	private int y;
+	
+	public Animation() {
+		x = 0;
+		y = 0;
+	}
 	
 	//@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		ArrayList<BoardCell> bcList = b.getCells();
 		int col = b.getNumColumns();
+		System.out.println("Columns: " + col);
 		int row = b.getNumRows();
+		System.out.println("Rows: " + row);
 		for (int i = 0; i<row; i++) {
 			x=0;
 			for (int j = 0; j<col; j++) {
@@ -49,10 +57,10 @@ public class Animation extends JPanel {
 					}
 				}
 				x+=SIDE;
+				System.out.println("X: " + x);
 			}
 			y+=SIDE;
+			System.out.println("Y: " + y);
 		}
 	}
-	
-
 }
