@@ -2,6 +2,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RoomCell extends BoardCell {
 	public enum DoorDirection	{
@@ -10,7 +12,7 @@ public class RoomCell extends BoardCell {
 	private DoorDirection doorDirection;
 	private char roomInitial;
 	private String roomName;
-	
+
 	public RoomCell(String symbol, String roomName, int row, int col){
 		this.row = row;
 		this.col = col;
@@ -18,7 +20,7 @@ public class RoomCell extends BoardCell {
 		this.cellType = symbol.charAt(0);
 		this.roomName = roomName;
 		char temp;
-		
+
 		if (symbol.length() > 1)
 		{
 			temp = symbol.charAt(1);
@@ -44,14 +46,14 @@ public class RoomCell extends BoardCell {
 		{
 			doorDirection = DoorDirection.NONE;
 		}
-				
+
 	}	
 
 	@Override
 	public boolean isRoom(){
 		return true;
 	}
-	
+
 	@Override
 	public boolean isDoorway(){
 		if(doorDirection.equals(DoorDirection.NONE)) return false;
@@ -63,7 +65,6 @@ public class RoomCell extends BoardCell {
 		g.setColor(Color.GRAY);
 		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
 		g.setColor(Color.BLACK);
-		g.drawRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
 		//Add doorways
 		if(this.isDoorway()) {
 			if(this.doorDirection.equals(doorDirection.DOWN)) {
@@ -81,21 +82,35 @@ public class RoomCell extends BoardCell {
 			}
 		}
 		//Add the names of each room
-		
+
 	}
-	
+
+	Set<String> drawed = new HashSet<String>();
+	String temp = "";
+
+	public void drawNames(Graphics g) {
+
+		temp = this.getRoomName();
+
+		if (!drawed.contains(temp)){
+			g.setColor(Color.BLUE);
+			g.drawString(temp, this.col*SIDE+50, this.row*SIDE+100);
+			drawed.add(temp);
+		}
+	}
+
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
 	}
-	
+
 	public char getRoomInitial() {
 		return roomInitial;
 	}
-	
+
 	public char getInitial(){
 		return roomInitial;
 	}
-	
+
 	public String getRoomName() {
 		return roomName;
 	}
