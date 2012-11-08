@@ -22,7 +22,6 @@ public class RoomCell extends BoardCell {
 		if (symbol.length() > 1)
 		{
 			temp = symbol.charAt(1);
-			//System.out.println(row + " " + col + " " + temp);
 			switch(temp){
 			case 'U':
 				doorDirection = DoorDirection.UP;
@@ -61,6 +60,27 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	public void draw(Graphics g, Board b){
+		g.setColor(Color.GRAY);
+		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
+		g.setColor(Color.BLACK);
+		g.drawRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
+		//Add doorways
+		if(this.isDoorway()) {
+			if(this.doorDirection.equals(doorDirection.DOWN)) {
+				g.setColor(Color.WHITE);
+				g.fillRect(this.col*SIDE, this.row*SIDE+SIDE-5, SIDE, 5);
+			} else if(this.doorDirection.equals(doorDirection.UP)) {
+				g.setColor(Color.WHITE);
+				g.fillRect(this.col*SIDE, this.row*SIDE+1, SIDE, 5);
+			} else if(this.doorDirection.equals(doorDirection.LEFT)) {
+				g.setColor(Color.WHITE);
+				g.fillRect(this.col*SIDE+1, this.row*SIDE, 5, SIDE);
+			} else {
+				g.setColor(Color.WHITE);
+				g.fillRect(this.col*SIDE+SIDE-6, this.row*SIDE, 5, SIDE);
+			}
+		}
+		//Add the names of each room
 		
 	}
 	

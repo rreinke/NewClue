@@ -24,35 +24,17 @@ import clueGame.Card.CardType;
 public class ClueGame extends JFrame {
 	Board b = new Board();
 	DetectiveDialog dd = null;
-	
+
 	public ClueGame() {
 		setTitle("Clue");
-		setSize(680,685);
-		setResizable(false);
-		//add(b, BorderLayout.CENTER);
-		Animation anim = new Animation();
-		add(anim, BorderLayout.CENTER);	
-
+		setSize(700,705);
+		add(b, BorderLayout.CENTER);
+		//Add a file menu with two options
 		JMenuBar menu = new JMenuBar();
 		setJMenuBar(menu);
 		menu.add(createFileMenu());
 	}
 
-	/*public void updateDrawing() {
-		Timer t = new Timer(1000, new TimerListener());
-		t.start();
-	}*/
-	
-	/*private class TimerListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			repaint();
-		}
-		
-	}*/
-	
 	private JMenu createFileMenu() {
 		JMenu menu = new JMenu("File");
 		menu.add(createFileItem("Detective Notes"));
@@ -69,20 +51,18 @@ public class ClueGame extends JFrame {
 		{
 			newItem.addActionListener(new NotesItemListener());
 		}
-		
+
 		return newItem;
 
 	}
-	
+
 	private class ExitItemListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) 
 		{
 			System.exit(0);
-			
-		}
-			
+		}		
 	}
-	
+
 	private class NotesItemListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) 
 		{
@@ -96,6 +76,5 @@ public class ClueGame extends JFrame {
 		ClueGame cg = new ClueGame();
 		cg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cg.setVisible(true);
-		//cg.updateDrawing();
 	}
 }
