@@ -610,14 +610,23 @@ public class Board extends JPanel {
 		{
 			for (int j=0; j<getNumColumns(); j++)
 			{
-					getBoardCellAt(calcIndex(i, j)).draw(g, this);
-					getBoardCellAt(calcIndex(i, j)).draw(g, this);
-					if (getBoardCellAt(calcIndex(i, j)).isRoom()) {
-						((RoomCell)getBoardCellAt(calcIndex(i, j))).drawNames(g);
-					}
+				getBoardCellAt(calcIndex(i, j)).draw(g, this);
+				getBoardCellAt(calcIndex(i, j)).draw(g, this);
+
 			}
 		}
 		
+		for (int i=0; i<getNumRows(); i++)
+		{
+			for (int j=0; j<getNumColumns(); j++)
+			{
+				if (getBoardCellAt(calcIndex(i, j)).isRoom()) {
+					((RoomCell)getBoardCellAt(calcIndex(i, j))).drawNames(g);
+				}
+
+			}
+		}
+
 	}
 }
 

@@ -85,11 +85,10 @@ public class RoomCell extends BoardCell {
 
 	}
 
-	Set<String> drawed = new HashSet<String>();
+	static Set<String> drawed = new HashSet<String>();
 	String temp = "";
 
 	public void drawNames(Graphics g) {
-
 		temp = this.getRoomName();
 
 		if (!drawed.contains(temp)){
@@ -97,6 +96,7 @@ public class RoomCell extends BoardCell {
 			g.drawString(temp, this.col*SIDE+50, this.row*SIDE+100);
 			drawed.add(temp);
 		}
+		
 	}
 
 	public DoorDirection getDoorDirection() {

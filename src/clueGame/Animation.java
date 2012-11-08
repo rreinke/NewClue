@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import clueGame.RoomCell.DoorDirection;
 
 public class Animation extends JPanel {
-	Board b = new Board();
+/*	Board b = new Board();
 	static final int SIDE = 40;
 	private int x;
 	private int y;
@@ -105,5 +105,5 @@ public class Animation extends JPanel {
 			}
 			y+=SIDE;
 		}
-	}
+	}*/
 }
