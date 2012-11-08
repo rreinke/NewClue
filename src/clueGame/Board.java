@@ -51,7 +51,8 @@ public class Board extends JPanel {
 	private final String layout = "src/clue_board.csv";
 	private final String WEAPON_FILE = "src/Weapons.csv";
 	private final String PLAYER_FILE = "src/Player.csv";
-	
+	static final int SIDE = 40;
+
 	// Constructor
 	public Board() {
 		computerPlayers = new ArrayList<ComputerPlayer>();
@@ -78,7 +79,7 @@ public class Board extends JPanel {
 	public void loadConfigFiles() {
 		Scanner scn;
 		String line;
-		
+
 		//This will be incremented to 0 for the first row later on		
 		numRows = -1;
 		try{
@@ -90,7 +91,7 @@ public class Board extends JPanel {
 					throw new BadConfigFormatException("One of your lines doesn't contain 2 entries.");
 				}
 				String[] split = line.split(",");
-				
+
 				if (split.length > 2) {
 					throw new BadConfigFormatException("Legend: A line has more than 2 entries");
 				}
@@ -107,7 +108,7 @@ public class Board extends JPanel {
 			System.out.println(ex.toString());
 			return;
 		}
-		
+
 		try {
 			//Read the layout file and load up the cells ArrayList
 			scn = new Scanner(new FileReader(layout));
@@ -145,19 +146,19 @@ public class Board extends JPanel {
 			return;
 		}
 	}
-	
+
 	public void loadPlayers()
 	{
 		try {
 			Scanner scan = new Scanner (new FileReader(PLAYER_FILE));
 			String inputLine;
-			
+
 			while (scan.hasNext())
 			{
 				inputLine = scan.nextLine();
-				
+
 				String [] personConfig = inputLine.split(",");
-				
+
 				try {
 					//Make sure the correct amount of information is given for each player.
 					//This includes name, color, and starting row and column.
@@ -167,16 +168,16 @@ public class Board extends JPanel {
 						Color color = convertColor(personConfig[1]);
 						int startRow = Integer.parseInt(personConfig[2]);
 						int startCol = Integer.parseInt(personConfig[3]);
-						
+
 						if (color == null)
 						{
 							throw new BadConfigFormatException("ERROR: One or more players in " + PLAYER_FILE + " had an invalid color!");
 						}
-						
+
 						if (this.getBoardCellAt(this.calcIndex(startRow, startCol)).isWalkway())
 						{
 							cards.add(new Card(name, CardType.PERSON));
-							
+
 							//Only one human player.
 							if (humanPlayer.isEmpty())
 							{
@@ -218,11 +219,11 @@ public class Board extends JPanel {
 		try {
 			Scanner scan = new Scanner(new FileReader(WEAPON_FILE));
 			String inputLine;
-			
+
 			while (scan.hasNext())
 			{
 				inputLine = scan.nextLine();
-				
+
 				if (inputLine.length() > 1)
 				{
 					cards.add(new Card(inputLine, CardType.WEAPON));
@@ -242,12 +243,12 @@ public class Board extends JPanel {
 			System.out.println(ex.toString());
 		}
 	}
-	
+
 	//Initialize each of the rooms as a card.
 	public void initRoomCards()
 	{
 		Collection<String> localRooms = rooms.values();
-		
+
 		for (String s : localRooms)
 		{
 			if (!(s.equals("Kafadar")))
@@ -256,7 +257,7 @@ public class Board extends JPanel {
 			}
 		}
 	}
-	
+
 	//Calculate the index of a given row and column.
 	public int calcIndex(int row, int col) {
 		return row*numColumns+col;
@@ -278,22 +279,22 @@ public class Board extends JPanel {
 	{
 		return computerPlayers.get(index);
 	}
-	
+
 	public ArrayList<ComputerPlayer> getComputerPlayers()
 	{
 		return computerPlayers;
 	}
-	
+
 	public HumanPlayer getHumanPlayer()
 	{
 		return humanPlayer.get(0);
 	}
-	
+
 	public ArrayList<Card> getCards()
 	{
 		return cards;
 	}
-	
+
 	//Returns null if index is not a room.
 	public RoomCell getRoomCellAt(int row, int col){
 		if(cells.get(calcIndex(row,col)).isRoom()){
@@ -306,7 +307,7 @@ public class Board extends JPanel {
 	public ArrayList<BoardCell> getCells(){
 		return cells;
 	}
-	
+
 	public BoardCell getBoardCellAt(int i){
 		return cells.get(i);
 	}
@@ -322,11 +323,11 @@ public class Board extends JPanel {
 	public int getNumColumns(){
 		return numColumns;
 	}
-	
+
 	public LinkedList<Integer> getAdjList(int i) {
 		return adjList.get(i);
 	}
-	
+
 	/*
 	 * The recursive calcTargets function
 	 */
@@ -335,9 +336,9 @@ public class Board extends JPanel {
 			targets.add(getBoardCellAt(start));
 			return;
 		}
-		
+
 		seen[start] = true;
-		
+
 		for (int i : getAdjList(start)) {
 			if (!seen[i]) {
 				calcTargetsRecurse(i, steps-1, startSteps);
@@ -345,7 +346,7 @@ public class Board extends JPanel {
 			}
 		}
 	}
-	
+
 	/* 
 	 * The calling calcTargets function, uses a help function calcTargetsRecurse
 	 */
@@ -356,7 +357,7 @@ public class Board extends JPanel {
 		}	
 		calcTargetsRecurse(start, steps, steps);
 	}
-	
+
 	/*
 	 * This was a helper function, prints out the row and column of a given index.
 	 * Exactly the opposite of calcIndex(int i)
@@ -364,11 +365,11 @@ public class Board extends JPanel {
 	public void inverseCalcIndex(Integer i){
 		System.out.println(i/numColumns + ", " + i%numColumns);
 	}
-	
+
 	public Set<BoardCell> getTargets() {
 		return targets;
 	}
-	
+
 	/*
 	 * Lots of if statements to determine what's adjacent to the respective spot
 	 */
@@ -428,7 +429,7 @@ public class Board extends JPanel {
 				// Check if i is on bottom of board
 				if(i+numColumns < cells.size()){
 					if(cells.get(i+numColumns).isWalkway())
-							adjList.get(i).add(i+numColumns);
+						adjList.get(i).add(i+numColumns);
 					else {
 						RoomCell temp = (RoomCell) cells.get(i+numColumns);
 						if(temp.getDoorDirection() == RoomCell.DoorDirection.UP)
@@ -438,7 +439,7 @@ public class Board extends JPanel {
 			}
 		}
 	}
-	
+
 	public void deal()
 	{
 		Random rand = new Random();
@@ -451,7 +452,7 @@ public class Board extends JPanel {
 		Card weapon;
 		int randIndex;
 		int playerIndex = -1;
-		
+
 		//Place each card in its respective category of person, room, or weapon.
 		for (Card c : cards)
 		{
@@ -468,31 +469,31 @@ public class Board extends JPanel {
 				Weapons.add(c);
 			}
 		}
-		
+
 		/*Randomly select one card from the rooms, one from players, and one from weapons and store
 		as the solution*/
 		randIndex = rand.nextInt(Rooms.size());
 		room = Rooms.get(randIndex);
 		Rooms.remove(randIndex);
-		
+
 		randIndex = rand.nextInt(People.size());
 		person = People.get(randIndex);
 		People.remove(randIndex);
-		
+
 		randIndex = rand.nextInt(Weapons.size());
 		weapon = Weapons.get(randIndex);
 		Weapons.remove(randIndex);
-		
+
 		solution = new Solution(person, weapon, room);
-		
+
 		remainingCards.addAll(Rooms);
 		remainingCards.addAll(Weapons);
 		remainingCards.addAll(People);
-		
+
 		while (!remainingCards.isEmpty())
 		{
 			randIndex = rand.nextInt(remainingCards.size());
-			
+
 			if (playerIndex == -1)
 			{
 				humanPlayer.get(0).addCard(remainingCards.get(randIndex));	
@@ -502,24 +503,24 @@ public class Board extends JPanel {
 			{
 				computerPlayers.get(playerIndex).addCard(remainingCards.get(randIndex));
 				playerIndex = ++playerIndex % computerPlayers.size();
-				
+
 				if (playerIndex == 0)
 				{
 					playerIndex = -1;
 				}
 			}
-			
+
 			remainingCards.remove(randIndex);
 		}
-		
+
 		return;
 	}
-	
+
 	//Returns true if all three cards in the accusation match the solution, false otherwise.
 	public boolean checkAccusation(Card person, Card weapon, Card room)
 	{
 		Solution tempSolution = new Solution(person, weapon, room);
-		
+
 		if (tempSolution.getPerson().equals(solution.getPerson()) && 
 				tempSolution.getWeapon().equals(solution.getWeapon()) &&
 				tempSolution.getRoom().equals(solution.getRoom()))
@@ -528,39 +529,39 @@ public class Board extends JPanel {
 		}
 		return false;
 	}
-	
+
 	//Randomly show a card that one of the computer players has to disprove a suggestion.
 	public Card handleSuggestion(Card person, Card room, Card weapon)
 	{
 		ArrayList<Card> disproveCards = new ArrayList<Card>();
 		Random rand = new Random();
-		
+
 		for (Player p : computerPlayers)
 		{
 			disproveCards.addAll(p.disproveSuggestion(person, room, weapon));
 		}
-		
+
 		for (Player p : humanPlayer)
 		{
 			disproveCards.addAll(p.disproveSuggestion(person, room, weapon));
 		}
-		
+
 		//Make sure none of currentPlayer's cards are shown to disprove the suggestion.
 		disproveCards.removeAll(currentPlayer.getCards());
-		
+
 		if (disproveCards.size() > 0)
 		{
 			return disproveCards.get(rand.nextInt(disproveCards.size()));
 		}
 		return null;
 	}
-	
+
 	public void selectAnswer()
 	{
 		return;
 	}
-	
-    // Be sure to trim the color, we don't want spaces around the name
+
+	// Be sure to trim the color, we don't want spaces around the name
 	public Color convertColor(String strColor) {
 		Color color; 
 		try {     
@@ -572,19 +573,19 @@ public class Board extends JPanel {
 		}
 		return color;
 	}
-	
+
 	//This is for testing purposes only and should not be called anywhere in the game play	
 	public void setSolution (Solution solution)
 	{
 		this.solution = solution;
-		
+
 		return;
 	}
 	//This is for testing purposes only and should not be called anywhere in the game play	
 	public void setComputerPlayers (ArrayList<ComputerPlayer> computerPlayers)
 	{
 		this.computerPlayers = computerPlayers;
-		
+
 		return;
 	}
 	//This is for testing purposes only and should not be called anywhere in the game play	
@@ -592,19 +593,33 @@ public class Board extends JPanel {
 	{
 		this.humanPlayer.clear();
 		this.humanPlayer.add(humanPlayer);
-		
+
 		return;
 	}
-	
+
 	//This is for testing purposes only and should not be called anywhere in the game play
 	public void setCurrentPlayer (Player player)
 	{
 		this.currentPlayer = player;
 	}
-	
-	public void paintComponent(Graphics g, BoardCell cell) {
+
+	@Override
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		cell.draw(g, this);
+		for (int i=0; i<getNumRows(); i++)
+		{
+			for (int j=0; j<getNumColumns(); j++)
+			{
+				int y = i * SIDE;
+				int x = j * SIDE;
+				if(getBoardCellAt(calcIndex(i, j)).isRoom()){
+					getBoardCellAt(calcIndex(i, j)).draw(g, this);
+				} else if(getBoardCellAt(calcIndex(i, j)).isWalkway()){
+					getBoardCellAt(calcIndex(i, j)).draw(g, this);
+				}
+			}
+		}
 	}
 }
+
 
