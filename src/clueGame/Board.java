@@ -610,13 +610,7 @@ public class Board extends JPanel {
 		{
 			for (int j=0; j<getNumColumns(); j++)
 			{
-				int y = i * SIDE;
-				int x = j * SIDE;
-				if(getBoardCellAt(calcIndex(i, j)).isRoom()){
-					getBoardCellAt(calcIndex(i, j)).draw(g, this);
-				} else if(getBoardCellAt(calcIndex(i, j)).isWalkway()){
-					getBoardCellAt(calcIndex(i, j)).draw(g, this);
-				}
+				getBoardCellAt(calcIndex(i, j)).draw(g, this);
 			}
 		}
 	}

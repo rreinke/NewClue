@@ -63,7 +63,6 @@ public class RoomCell extends BoardCell {
 		g.setColor(Color.GRAY);
 		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
 		g.setColor(Color.BLACK);
-		g.drawRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
 		//Add doorways
 		if(this.isDoorway()) {
 			if(this.doorDirection.equals(doorDirection.DOWN)) {
