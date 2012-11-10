@@ -23,9 +23,9 @@ public class PlayerPanel extends JPanel{
 	
 	public PlayerPanel() {
 		myCards = new JLabel("My Cards");
-		peopleField = new JTextField(30);
-		roomField = new JTextField(30);
-		weaponField = new JTextField(30);
+		peopleField = new JTextField(10);
+		roomField = new JTextField(5);
+		weaponField = new JTextField(5);
 		
 		pPanel = new JPanel();
 		rPanel = new JPanel();
@@ -38,7 +38,7 @@ public class PlayerPanel extends JPanel{
 		rPanel.setBorder(new TitledBorder(new EtchedBorder(), "Room"));
 		wPanel.setBorder(new TitledBorder(new EtchedBorder(), "Weapon"));
 		
-		setLayout(new GridLayout(4,1));
+		//setLayout(new GridLayout(1,4));
 		add(myCards);
 		add(pPanel);
 		add(rPanel);

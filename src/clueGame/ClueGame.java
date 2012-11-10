@@ -22,13 +22,15 @@ import javax.swing.JPanel;
 import clueGame.Card.CardType;
 
 public class ClueGame extends JFrame {
-	Board b = new Board();
 	DetectiveDialog dd = null;
 
 	public ClueGame() {
 		setTitle("Clue");
-		setSize(700,705);
-		add(b, BorderLayout.CENTER);
+		setSize(510,720);
+		
+		add(new PlayerPanel(), BorderLayout.NORTH);
+		add(new ControlPanel(), BorderLayout.SOUTH);
+		add(new Board(), BorderLayout.CENTER);
 		//Add a file menu with two options
 		JMenuBar menu = new JMenuBar();
 		setJMenuBar(menu);
@@ -74,7 +76,9 @@ public class ClueGame extends JFrame {
 
 	public static void main(String [] args) {
 		ClueGame cg = new ClueGame();
+
 		cg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cg.setVisible(true);
+		
 	}
 }

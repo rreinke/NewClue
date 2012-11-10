@@ -68,7 +68,6 @@ public class ControlPanel extends JPanel{
 			gResultPanel.add(respField);
 			gResultPanel.setBorder(new TitledBorder(new EtchedBorder(), "Room"));
 	
-			
 			setLayout(new GridLayout(2,3));
 			add(whosPanel);
 			add(nxtPlayer);
