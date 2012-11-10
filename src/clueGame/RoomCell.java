@@ -71,7 +71,6 @@ public class RoomCell extends BoardCell {
 	public void draw(Graphics g, Board b){
 		g.setColor(Color.GRAY);
 		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
-		g.setColor(Color.BLACK);
 		//Add doorways
 		if(this.isDoorway()) {
 			if(this.doorDirection.equals(doorDirection.DOWN)) {

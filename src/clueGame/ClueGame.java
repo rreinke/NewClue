@@ -1,29 +1,16 @@
 package clueGame;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import javax.swing.Timer;
-import javax.swing.border.*;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-
-import clueGame.Card.CardType;
 
 public class ClueGame extends JFrame {
-	Board b = new Board();
 	DetectiveDialog dd = null;
+	Board b = new Board();
 
 	public ClueGame() {
 		setTitle("Clue");
