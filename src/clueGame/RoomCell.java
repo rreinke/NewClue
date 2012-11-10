@@ -2,6 +2,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +13,14 @@ public class RoomCell extends BoardCell {
 	private DoorDirection doorDirection;
 	private char roomInitial;
 	private String roomName;
+	static ArrayList<String> drawn = new ArrayList<String>();
+	String temp = "";
+	int counter = 0;
+	String symbol = "";
+	ArrayList<RoomCell> roomsWithNames = new ArrayList<RoomCell>();
 
 	public RoomCell(String symbol, String roomName, int row, int col){
+		this.symbol = symbol;
 		this.row = row;
 		this.col = col;
 		this.roomInitial = symbol.charAt(0);
@@ -81,22 +88,20 @@ public class RoomCell extends BoardCell {
 				g.fillRect(this.col*SIDE+SIDE-6, this.row*SIDE, 5, SIDE);
 			}
 		}
-		//Add the names of each room
-
 	}
 
-	static Set<String> drawed = new HashSet<String>();
-	String temp = "";
-
-	public void drawNames(Graphics g) {
-		temp = this.getRoomName();
-
-		if (!drawed.contains(temp)){
-			g.setColor(Color.BLUE);
-			g.drawString(temp, this.col*SIDE+50, this.row*SIDE+100);
-			drawed.add(temp);
+	public void drawNames(Graphics g) {	
+		if(this.symbol.length() > 1) {
+			if(this.symbol.charAt(1) == 'N') {
+				roomsWithNames.add(this);
+			}
 		}
 		
+		for(RoomCell rc : roomsWithNames) {
+			g.setColor(Color.WHITE);
+			System.out.println(rc.roomName);
+			g.drawString(rc.roomName, rc.col*SIDE, rc.row*SIDE);
+		}
 	}
 
 	public DoorDirection getDoorDirection() {

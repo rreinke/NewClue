@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -605,17 +606,16 @@ public class Board extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+		super.paintComponent(g);	
+		
 		for (int i=0; i<getNumRows(); i++)
 		{
 			for (int j=0; j<getNumColumns(); j++)
 			{
 				getBoardCellAt(calcIndex(i, j)).draw(g, this);
-				getBoardCellAt(calcIndex(i, j)).draw(g, this);
-
 			}
 		}
-		
+
 		for (int i=0; i<getNumRows(); i++)
 		{
 			for (int j=0; j<getNumColumns(); j++)
@@ -623,11 +623,11 @@ public class Board extends JPanel {
 				if (getBoardCellAt(calcIndex(i, j)).isRoom()) {
 					((RoomCell)getBoardCellAt(calcIndex(i, j))).drawNames(g);
 				}
-
 			}
 		}
-
 	}
+
 }
+
 
 
