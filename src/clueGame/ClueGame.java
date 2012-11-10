@@ -10,12 +10,13 @@ import javax.swing.JMenuItem;
 
 public class ClueGame extends JFrame {
 	DetectiveDialog dd = null;
-	Board b = new Board();
 
 	public ClueGame() {
 		setTitle("Clue");
-		setSize(700,705);
-		add(b, BorderLayout.CENTER);
+		setSize(720,705);
+		add(new Board(), BorderLayout.CENTER);
+		add(new PlayerPanel(), BorderLayout.EAST);
+		add(new ControlPanel(), BorderLayout.SOUTH);
 		//Add a file menu with two options
 		JMenuBar menu = new JMenuBar();
 		setJMenuBar(menu);

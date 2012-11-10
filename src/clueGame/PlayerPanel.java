@@ -38,7 +38,7 @@ public class PlayerPanel extends JPanel{
 		rPanel.setBorder(new TitledBorder(new EtchedBorder(), "Room"));
 		wPanel.setBorder(new TitledBorder(new EtchedBorder(), "Weapon"));
 		
-		//setLayout(new GridLayout(1,4));
+		setLayout(new GridLayout(4,1));
 		add(myCards);
 		add(pPanel);
 		add(rPanel);

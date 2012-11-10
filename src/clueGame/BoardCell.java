@@ -6,7 +6,7 @@ abstract public class BoardCell {
 	public int row;
 	public int col;
 	protected char cellType;
-	public static final int SIDE = 30;
+	public static final int SIDE = 33;
 	
 	public BoardCell(){
 		
