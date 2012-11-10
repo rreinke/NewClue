@@ -1,9 +1,6 @@
 package clueGame;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -12,19 +9,13 @@ import javax.swing.border.TitledBorder;
 
 public class PlayerPanel extends JPanel{
 	JLabel myCards;
-	
-	JTextField peopleField;
-	JTextField roomField;
-	JTextField weaponField;
-	
-	JPanel pPanel;
-	JPanel rPanel;
-	JPanel wPanel;
+	JTextField peopleField, roomField, weaponField;
+	JPanel pPanel, rPanel, wPanel;
 	
 	public PlayerPanel() {
 		myCards = new JLabel("My Cards");
 		peopleField = new JTextField(10);
-		roomField = new JTextField(5);
+		roomField = new JTextField(10);
 		weaponField = new JTextField(5);
 		
 		pPanel = new JPanel();
@@ -44,16 +35,4 @@ public class PlayerPanel extends JPanel{
 		add(rPanel);
 		add(wPanel);
 	}
-	
-	
-	// TESTING
-	public static void main(String[] args) {
-		JFrame  frame  = new JFrame("TEST");
-		
-		frame.add(new PlayerPanel(), BorderLayout.EAST);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(800,800);
-		frame.setVisible(true);
-	}
-
 }

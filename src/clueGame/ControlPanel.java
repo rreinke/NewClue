@@ -12,40 +12,24 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 public class ControlPanel extends JPanel{
-
-		JLabel whos;
-		JLabel die;
-		JLabel guess;
-		JLabel response;
-		
-		JTextField turnField;
-		JTextField respField;
-		JTextField dieField;
-		JTextField guessField;
-		
-		JButton nxtPlayer;
-		JButton mkAccusation;
-		
-		JPanel diePanel;
-		JPanel gPanel;
-		JPanel gResultPanel;
-		JPanel whosPanel;
+		JLabel whos, die, guess, response;	
+		JTextField turnField, respField, dieField, guessField;
+		JButton nxtPlayer, mkAccusation;
+		JPanel diePanel, gPanel, gResultPanel, whosPanel;
 		
 		public ControlPanel() {
-			
 			whos = new JLabel("Whose Turn?");
-			die = new JLabel("Die");
+			die = new JLabel("Roll");
 			guess = new JLabel("Guess");
 			response = new JLabel("Response");
 			
 			turnField = new JTextField(20);
 			respField = new JTextField("Response");
-			dieField = new JTextField("Die #");
+			dieField = new JTextField("5");
 			guessField = new JTextField("Guess");
 			respField.setEditable(false);
 			dieField.setEditable(false);
 			guessField.setEditable(false);
-			
 			
 			nxtPlayer = new JButton("Next Player");
 			mkAccusation = new JButton("Make Accusation");
@@ -75,19 +59,5 @@ public class ControlPanel extends JPanel{
 			add(diePanel);
 			add(gPanel);
 			add(gResultPanel);
-
 		}
-		
-		
-		// TESTING
-		public static void main(String[] args) {
-			JFrame  frame  = new JFrame("TEST");
-			
-			frame.add(new ControlPanel(), BorderLayout.SOUTH);
-			frame.add(new PlayerPanel(), BorderLayout.EAST);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setSize(800,800);
-			frame.setVisible(true);
-		}
-
 }
