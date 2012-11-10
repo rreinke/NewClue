@@ -3,7 +3,7 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import clueGame.RoomCell.DoorDirection;
 
 public class Animation extends JPanel {
-	Board b = new Board();
+/*	Board b = new Board();
 	static final int SIDE = 40;
 	private int x;
 	private int y;
@@ -31,18 +31,11 @@ public class Animation extends JPanel {
 		ArrayList<ComputerPlayer> cPlayers = b.getComputerPlayers();
 		HumanPlayer hPlayer = b.getHumanPlayer();
 		int col = b.getNumColumns();
-		System.out.println("Columns: " + col);
 		int row = b.getNumRows();
-
-		int counter = 0;
-		Map<Character,String> rooms = b.getRooms();
-		Map<Character,Boolean> drawName = new HashMap<Character, Boolean>();
-		Object [] roomsInitials = rooms.keySet().toArray();
-		char initial = '1';
 		
-		for (int k = 0; k < rooms.size(); k++) {
-			drawName.put((char) roomsInitials[k], false);
-		}
+		Map<Character,String> rooms = b.getRooms();
+		Set<String> drawed = new HashSet<String>();
+		String temp = "";
 		
 		for (int i = 0; i<row; i++) {
 			x=0;
@@ -71,17 +64,6 @@ public class Animation extends JPanel {
 					
 				}
 				else {
-					for (int cnt = 0; cnt < roomsInitials.length; cnt++) {
-						//System.out.println((char)roomsInitials[cnt]);
-						
-						if ((char)roomsInitials[cnt] != initial) {
-							g.setColor(Color.BLUE);
-							g.drawString(((RoomCell)bcList.get(i*col+j)).getRoomName(), x, y);
-							initial = (((RoomCell)bcList.get(i*col+j)).getRoomName()).charAt(0);
-						}
-					}
-					System.out.println();
-						
 					g.setColor(Color.GRAY);
 					g.fillRect(x, y, SIDE, SIDE);
 					if (bcList.get(i*col+j).isDoorway()) {
@@ -101,12 +83,27 @@ public class Animation extends JPanel {
 					}
 				}
 				x+=SIDE;
-				System.out.println("X: " + x);
 			}
 			y+=SIDE;
-			System.out.println("Y: " + y);
 		}
 		
+		y = 0;
 		
-	}
+		for (int i = 0; i<row; i++) {
+			x=0;
+			for (int j = 0; j<col; j++) {
+				if (bcList.get(i*col+j).isRoom()) {
+					temp = ((RoomCell)bcList.get(i*col+j)).getRoomName();
+				
+					if (!drawed.contains(temp)){
+						g.setColor(Color.BLUE);
+						g.drawString(temp, x+50, y+100);
+						drawed.add(temp);
+					}
+				}
+				x+=SIDE;
+			}
+			y+=SIDE;
+		}
+	}*/
 }
