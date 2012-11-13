@@ -57,11 +57,22 @@ public class ControlPanel extends JPanel{
 
 		class nxtPlayerListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				
+				//roll the dice and display the number
+				//display whose turn it is
+				//if computerPlayer turn call computerTurn()
+				//if humanPlayer turn call humanTurn()
+				//Do not go on to the next player if the it the target has not been selected
 			}
 		}
 
 		nxtPlayer.addActionListener(new nxtPlayerListener());
+		
+		class makeAccusationListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				//add logic to the human player making an accusation
+			}
+			
+		}
 
 		setLayout(new GridLayout(2,3));
 		add(whosPanel);
@@ -70,7 +81,13 @@ public class ControlPanel extends JPanel{
 		add(diePanel);
 		add(gPanel);
 		add(gResultPanel);
-
-
+	}
+	
+	private void computerTurn() {
+		//logic for computer's turn
+	}
+	
+	private void humanTurn() {
+		//logic for human's turn
 	}
 }

@@ -14,14 +14,14 @@ import clueGame.Card.CardType;
 
 public class PlayerPanel extends JPanel{
 	JLabel myCards;
-	JTextField peopleField, roomField, weaponField;
+	JTextArea peopleField, roomField, weaponField;
 	JPanel pPanel, rPanel, wPanel;
 
 	public PlayerPanel(HumanPlayer player) {
 		myCards = new JLabel("My Cards");
-		peopleField = new JTextField();
-		roomField = new JTextField();
-		weaponField = new JTextField();
+		peopleField = new JTextArea();
+		roomField = new JTextArea();
+		weaponField = new JTextArea();
 
 		//Displaying the players cards to the screen
 		ArrayList<Card> humanPlayerCards  = new ArrayList<Card>();
@@ -35,19 +35,19 @@ public class PlayerPanel extends JPanel{
 			//Add name to the text if there is already text
 			if(c.getCardType() == CardType.PERSON) {
 				if(!(personTxt.equals(""))) {
-					personTxt = personTxt + " and " + (c.getName());
+					personTxt = personTxt + " \n" + (c.getName());
 				} else {
 					personTxt = c.getName();
 				}
 			} else if(c.getCardType() == CardType.ROOM) {
 				if(!(roomTxt.equals(""))) {
-					roomTxt = roomTxt + " and " + (c.getName());
+					roomTxt = roomTxt + " \n" + (c.getName());
 				} else {
 					roomTxt = c.getName();
 				}
 			} else {
 				if(!(weaponTxt.equals(""))) {
-					weaponTxt = weaponTxt + " and " + (c.getName());
+					weaponTxt = weaponTxt + " \n" + (c.getName());
 				} else {
 					weaponTxt = c.getName();
 				}
