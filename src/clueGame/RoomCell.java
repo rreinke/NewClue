@@ -98,7 +98,6 @@ public class RoomCell extends BoardCell {
 		
 		for(RoomCell rc : roomsWithNames) {
 			g.setColor(Color.WHITE);
-			System.out.println(rc.roomName);
 			g.drawString(rc.roomName, rc.col*SIDE, rc.row*SIDE);
 		}
 	}

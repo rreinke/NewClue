@@ -252,7 +252,7 @@ public class Board extends JPanel {
 
 		for (String s : localRooms)
 		{
-			if (!(s.equals("Kafadar")))
+			if (!(s.equals("Kafadar")) && !(s.equals("Walkway")))
 			{
 				cards.add(new Card(s, CardType.ROOM));
 			}

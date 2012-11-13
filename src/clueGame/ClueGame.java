@@ -7,15 +7,17 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame {
 	DetectiveDialog dd = null;
+	Board b = new Board();
 
 	public ClueGame() {
 		setTitle("Clue");
 		setSize(720,705);
-		add(new Board(), BorderLayout.CENTER);
-		add(new PlayerPanel(), BorderLayout.EAST);
+		add(b, BorderLayout.CENTER);
+		add(new PlayerPanel(b.getHumanPlayer()), BorderLayout.EAST);
 		add(new ControlPanel(), BorderLayout.SOUTH);
 		//Add a file menu with two options
 		JMenuBar menu = new JMenuBar();
@@ -60,9 +62,14 @@ public class ClueGame extends JFrame {
 		}
 	}
 
+
 	public static void main(String [] args) {
 		ClueGame cg = new ClueGame();
+		String title = "Welcome to Clue!";
+		String message = "You are " + cg.b.getHumanPlayer().getName() + ", press Next Player to begin play";
+		
 		cg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cg.setVisible(true);
+		JOptionPane.showMessageDialog(cg, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 }
