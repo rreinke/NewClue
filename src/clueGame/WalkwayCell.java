@@ -38,4 +38,9 @@ public class WalkwayCell extends BoardCell {
 		g.setColor(Color.BLACK);
 		g.drawOval(b.getHumanPlayer().getCurrentLocation().col*SIDE, b.getHumanPlayer().getCurrentLocation().row*SIDE, SIDE, SIDE);
 	}
+	
+	public void drawTargets(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
+	}
 }

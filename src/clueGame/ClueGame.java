@@ -9,16 +9,20 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import clueGame.Board.CellListener;
+
 public class ClueGame extends JFrame {
 	DetectiveDialog dd = null;
-	Board b = new Board();
+	final Board b;
 
 	public ClueGame() {
 		setTitle("Clue");
 		setSize(720,705);
+		b = new Board();
+		System.out.println(b.solution.room.getName() + " " + b.solution.person.getName() + " " + b.solution.weapon.getName());
 		add(b, BorderLayout.CENTER);
 		add(new PlayerPanel(b.getHumanPlayer()), BorderLayout.EAST);
-		add(new ControlPanel(), BorderLayout.SOUTH);
+		add(new ControlPanel(b), BorderLayout.SOUTH);
 		//Add a file menu with two options
 		JMenuBar menu = new JMenuBar();
 		setJMenuBar(menu);

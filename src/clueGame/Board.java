@@ -13,6 +13,8 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.reflect.Field;
@@ -22,24 +24,23 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import clueGame.Card.CardType;
 
 public class Board extends JPanel {
 
 	// Variables
+	Solution solution;
 	private ArrayList<ComputerPlayer> computerPlayers;
 	private Player currentPlayer;
 	//In case we ever want more than one human player
 	private ArrayList<HumanPlayer> humanPlayer;
 	private ArrayList<Card> cards;
-	private Solution solution;
 	private ArrayList<BoardCell> cells;
 	private Map<Character,String> rooms;
 	private int numRows;
@@ -53,6 +54,7 @@ public class Board extends JPanel {
 	private final String WEAPON_FILE = "src/Weapons.csv";
 	private final String PLAYER_FILE = "src/Player.csv";
 	static final int SIDE = 40;
+	Graphics g;
 
 	// Constructor
 	public Board() {
@@ -71,6 +73,42 @@ public class Board extends JPanel {
 		calcAdjacencies();
 		deal();
 		seen = new boolean[cells.size()];
+		addMouseListener(new CellListener());
+	}
+
+	//Adding mouse listener so the user can make a move
+	class CellListener implements MouseListener {
+		int x, y;
+		Set<BoardCell> options = getTargets();
+		@Override
+		public void mousePressed(MouseEvent e) {
+			Set<BoardCell> options = getTargets();
+			for(BoardCell bc : options) {
+				int x = e.getX();
+				int y = e.getY();
+				int xLowerBound = bc.col*SIDE;
+				int xUpperBound = xLowerBound + SIDE;
+				int yLowerBound = bc.row*SIDE;
+				int yUpperBound = yLowerBound + SIDE;
+
+				if((x > xLowerBound) && (x < xUpperBound) && (y > yLowerBound) && (y < yUpperBound)) {
+					getHumanPlayer().setCurrentLocation(bc.row+1, bc.col+1);
+					repaint();
+					ControlPanel.humanTurn = false;
+					ControlPanel.computerTurn = true;
+				} 
+			}
+			if(ControlPanel.humanTurn) {
+				JOptionPane.showMessageDialog(getParent(), "Invalid move!");
+			}
+			for(BoardCell cell : options) {
+				//Redraw the cells with correct colors
+			}
+		}
+		public void mouseClicked(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
 	}
 
 	/* 
@@ -607,7 +645,7 @@ public class Board extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);	
-		
+
 		for (int i=0; i<getNumRows(); i++)
 		{
 			for (int j=0; j<getNumColumns(); j++)
@@ -625,8 +663,19 @@ public class Board extends JPanel {
 				}
 			}
 		}
-	}
 
+		for (int i=0; i<getNumRows(); i++)
+		{
+			for (int j=0; j<getNumColumns(); j++)
+			{
+				if (getTargets().contains(getBoardCellAt(calcIndex(i, j)))) {
+					if(ControlPanel.humanTurn) {
+						getBoardCellAt(calcIndex(i, j)).drawTargets(g);
+					}
+				}
+			}
+		}	
+	}
 }
 
 
