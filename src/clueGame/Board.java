@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
@@ -30,6 +29,8 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import clueGame.Card.CardType;
+
+
 
 public class Board extends JPanel {
 
@@ -252,7 +253,7 @@ public class Board extends JPanel {
 
 		for (String s : localRooms)
 		{
-			if (!(s.equals("Kafadar")))
+			if (!(s.equals("Kafadar")) && !(s.equals("Walkway")))
 			{
 				cards.add(new Card(s, CardType.ROOM));
 			}
@@ -626,6 +627,7 @@ public class Board extends JPanel {
 			}
 		}
 	}
+	
 
 }
 
