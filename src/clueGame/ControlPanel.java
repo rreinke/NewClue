@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -67,12 +69,81 @@ public class ControlPanel extends JPanel{
 
 		nxtPlayer.addActionListener(new nxtPlayerListener());
 		
+		class submitListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				//add logic for checking the accusation
+			}
+		}
+
+		//Class extends JPanel for the accusation panel	
+		class accusationPanel extends JPanel {
+			public accusationPanel() {
+				JPanel ap = new JPanel();
+				JButton submit = new JButton("Submit");
+				submit.addActionListener(new submitListener());
+				JComboBox personAccusation, roomAccusation, weaponAccusation;
+				JLabel room, person, weapon;
+
+				room = new JLabel("Room");
+				person = new JLabel("Person");
+				weapon = new JLabel("Weapon");
+				ap.setLayout(new GridLayout(4, 2));
+
+				personAccusation = createNewPersonComboBox();
+				roomAccusation = createNewRoomComboBox();
+				weaponAccusation = createNewWeaponComboBox();
+
+				ap.add(room);
+				ap.add(roomAccusation);
+				ap.add(person);
+				ap.add(personAccusation);
+				ap.add(weapon);
+				ap.add(weaponAccusation);	
+				ap.add(submit);
+				add(ap);
+			}
+
+			private JComboBox createNewPersonComboBox() {
+				JComboBox personCombo = new JComboBox();
+				personCombo.addItem("Rachel");
+				personCombo.addItem("Paul");
+				personCombo.addItem("Tigger");
+				return personCombo;
+			}
+
+			private JComboBox createNewRoomComboBox() {
+				JComboBox roomCombo = new JComboBox();
+				roomCombo.addItem("Kitchen");
+				roomCombo.addItem("Dining room");
+				return roomCombo;
+			}
+
+			private JComboBox createNewWeaponComboBox() {
+				JComboBox weaponCombo = new JComboBox();
+				weaponCombo.addItem("Spoon");
+				weaponCombo.addItem("Spork");
+				return weaponCombo;
+			}
+		}
+
+		//class that extends JFrame for the accusation panel when make accusation is clicked
+		class accusationFrame extends JFrame {
+			public accusationFrame() {
+				JFrame af = new JFrame();
+				af.setTitle("Accusation!");
+				af.setSize(300, 200);
+				af.add(new accusationPanel(), BorderLayout.CENTER);
+				af.setVisible(true);
+			}
+		}
+
 		class makeAccusationListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				//add logic to the human player making an accusation
+				accusationFrame af = new accusationFrame();
 			}
-			
 		}
+		
+		mkAccusation.addActionListener(new makeAccusationListener());
 
 		setLayout(new GridLayout(2,3));
 		add(whosPanel);
@@ -82,11 +153,11 @@ public class ControlPanel extends JPanel{
 		add(gPanel);
 		add(gResultPanel);
 	}
-	
+
 	private void computerTurn() {
 		//logic for computer's turn
 	}
-	
+
 	private void humanTurn() {
 		//logic for human's turn
 	}

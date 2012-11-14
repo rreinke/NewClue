@@ -41,9 +41,7 @@ public class ClueGame extends JFrame {
 		{
 			newItem.addActionListener(new NotesItemListener());
 		}
-
 		return newItem;
-
 	}
 
 	private class ExitItemListener implements ActionListener {
@@ -62,12 +60,10 @@ public class ClueGame extends JFrame {
 		}
 	}
 
-
 	public static void main(String [] args) {
 		ClueGame cg = new ClueGame();
 		String title = "Welcome to Clue!";
 		String message = "You are " + cg.b.getHumanPlayer().getName() + ", press Next Player to begin play";
-		
 		cg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cg.setVisible(true);
 		JOptionPane.showMessageDialog(cg, message, title, JOptionPane.INFORMATION_MESSAGE);
