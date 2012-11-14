@@ -117,4 +117,10 @@ public class RoomCell extends BoardCell {
 	public String getRoomName() {
 		return roomName;
 	}
+
+	@Override
+	public void drawTargets(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
+	}
 }

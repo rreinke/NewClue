@@ -70,6 +70,7 @@ public class ClueGame extends JFrame {
 		
 		cg.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		cg.setVisible(true);
+		
 		JOptionPane.showMessageDialog(cg, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 }

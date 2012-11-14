@@ -25,5 +25,6 @@ abstract public class BoardCell {
 	}
 
 	abstract public void draw(Graphics g, Board b);
+	abstract public void drawTargets(Graphics g);
 }
 
