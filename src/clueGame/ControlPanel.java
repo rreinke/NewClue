@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -115,7 +116,7 @@ public class ControlPanel extends JPanel{
 				}
 			}
 		}
-		
+
 		class submitSuggListener implements ActionListener {
 
 			@Override
@@ -125,10 +126,10 @@ public class ControlPanel extends JPanel{
 						+ " \nwith the " + b.weaponCombo.getSelectedItem().toString());
 				b.sf.setVisible(false);									
 			}
-			
+
 		}
 		b.submit.addActionListener(new submitSuggListener());
-		
+
 
 		//Class extends JPanel for the accusation panel	
 		class accusationPanel extends JPanel {
@@ -245,6 +246,18 @@ public class ControlPanel extends JPanel{
 			}
 			if(dealtCards.isEmpty()) {
 				respField.setText("no new clue");
+				String state = "";
+				if(cp.getSuggestedPerson().toString().equals(b.solution.person.getName()) &&
+						cp.getSuggestedRoom().toString().equals(b.solution.room.getName()) &&
+						cp.getSuggestedWeapon().toString().equals(b.solution.weapon.getName())) {
+						state = "Accusation is right!";
+				}else {
+					state = "Accusation is wrong!";
+				}
+					JOptionPane.showMessageDialog(null, cp.getSuggestedPerson() + " in " 
+							+ cp.getSuggestedRoom() + " with " 
+							+ cp.getSuggestedWeapon() + "\n" + state);
+				
 			} else {
 				respField.setText(dealtCards.get(0).getName());
 			}
