@@ -38,7 +38,7 @@ public class ControlPanel extends JPanel{
 	JPanel diePanel, gPanel, gResultPanel, whosPanel;
 	JComboBox personAccusation, roomAccusation, weaponAccusation;
 	JComboBox roomCombo, weaponCombo, personCombo;
-	
+
 	Random rand = new Random();
 	int rolling;
 	int indx;
@@ -62,7 +62,7 @@ public class ControlPanel extends JPanel{
 		respField.setEditable(false);
 		dieField.setEditable(false);
 		guessField.setEditable(false);
-		
+
 		nxtPlayer = new JButton("Next Player");
 		mkAccusation = new JButton("Make Accusation");
 
@@ -93,11 +93,17 @@ public class ControlPanel extends JPanel{
 				else if (computerTurn) {
 					computerTurn(b, b.getComputerPlayer(cnt));
 				}
+
+
+				if(b.submitted) {
+					guessField.setText(b.choosenPerson+" in "+b.choosenRoom+ " \nwith the " + b.choosenWeapon);
+				}
+				b.submitted = false;
 			}
 		}
 
 		nxtPlayer.addActionListener(new nxtPlayerListener());
-		
+
 		class submitAccListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				if(personAccusation.getSelectedItem().toString().equals(b.solution.person.getName()) &&
@@ -109,6 +115,20 @@ public class ControlPanel extends JPanel{
 				}
 			}
 		}
+		
+		class submitSuggListener implements ActionListener {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				guessField.setText(b.personCombo.getSelectedItem().toString()
+						+" in "+b.currentRoom.getText().toString()
+						+ " \nwith the " + b.weaponCombo.getSelectedItem().toString());
+				b.sf.setVisible(false);									
+			}
+			
+		}
+		b.submit.addActionListener(new submitSuggListener());
+		
 
 		//Class extends JPanel for the accusation panel	
 		class accusationPanel extends JPanel {
@@ -201,23 +221,23 @@ public class ControlPanel extends JPanel{
 		if(cp.getCurrentLocation().isRoom()){
 			cp.createSuggestion(b.getCards());
 			guessField.setText(cp.getSuggestedPerson().getName() +" in "+((RoomCell) cp.getCurrentLocation()).getRoomName()+ " \nwith the " + cp.getSuggestedWeapon().getName());
-			
+
 			ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
 			HumanPlayer hplayer = b.getHumanPlayer();
 			ArrayList<Card> compPCards = new ArrayList<Card>();
 			ArrayList<Card> dealtCards = new ArrayList<Card>();
-			
+
 			for(Card hc : hplayer.getCards()){
 				compPCards.add(hc);
 			}
-			
+
 			for(ComputerPlayer c : compP) {
 				if(!c.equals(cp)){
 					for(Card cc: c.getCards())
-					compPCards.add(cc);
+						compPCards.add(cc);
 				}
 			}
-			
+
 			for(Card c: compPCards){
 				if(c.equals(cp.getSuggestedPerson()) || c.equals(cp.getSuggestedRoom()) || c.equals(cp.getSuggestedWeapon())){
 					dealtCards.add(c);
@@ -251,16 +271,16 @@ public class ControlPanel extends JPanel{
 		// Picking the targets from current location
 		b.calcTargets(indx, rolling);
 		setCell = b.getTargets();
-		
+
 		ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
 		ArrayList<Card> compPCards = new ArrayList<Card>();
 		ArrayList<Card> dealtCards = new ArrayList<Card>();
-		
+
 		for(ComputerPlayer c : compP) {
 			for(Card cc: c.getCards())
 				compPCards.add(cc);
 		}
-		
+
 		for(Card c: compPCards){
 			if(c.getName().equals(b.choosenPerson) 
 					|| c.getName().equals(b.choosenRoom) 
@@ -273,10 +293,8 @@ public class ControlPanel extends JPanel{
 		} else {
 			respField.setText(dealtCards.get(0).getName());
 		}
-		
-		if(b.submitted) {
-			guessField.setText(b.choosenPerson+" in "+b.choosenRoom+ " \nwith the " + b.choosenWeapon);
-		}
+
+
 		b.repaint();
 
 	}

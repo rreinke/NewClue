@@ -65,8 +65,11 @@ public class Board extends JPanel {
 	private final String PLAYER_FILE = "src/Player.csv";
 	static final int SIDE = 40;
 	Graphics g;
-	JTextField currentRoom ;
+	JTextField currentRoom = new JTextField();
 	JComboBox roomCombo, weaponCombo, personCombo;
+	
+	JButton submit;
+	JFrame sf; 
 	
 	String choosenPerson="";
 	String choosenRoom="";
@@ -83,6 +86,7 @@ public class Board extends JPanel {
 		rooms = new HashMap<Character,String>();
 		adjList = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<BoardCell>();
+		submit = new JButton("Submit");
 		loadConfigFiles();
 		loadPlayers();
 		loadWeapons();
@@ -116,52 +120,36 @@ public class Board extends JPanel {
 						if(getBoardCellAt(calcIndex(getHumanPlayer().currentLocation.row, getHumanPlayer().currentLocation.col)).isRoom()) {
 							
 							JPanel sp = new JPanel();
-							JButton submit = new JButton("Submit");
+							
 							
 							//submit.addActionListener(new submitListener());
 							JLabel room, person, weapon;
-							currentRoom =
-							new JTextField(getRoomCellAt(getHumanPlayer().currentLocation.row, getHumanPlayer().currentLocation.col).getRoomName());
-							JComboBox personAccusation, weaponAccusation;
+							currentRoom.setText(getRoomCellAt(getHumanPlayer().currentLocation.row, getHumanPlayer().currentLocation.col).getRoomName());
 
 							room = new JLabel("Room");
 							person = new JLabel("Person");
 							weapon = new JLabel("Weapon");
 							sp.setLayout(new GridLayout(4, 2));
 
-							personAccusation = createNewPersonComboBox();
-							weaponAccusation = createNewWeaponComboBox();
+							personCombo = createNewPersonComboBox();
+							weaponCombo = createNewWeaponComboBox();
 
 							sp.add(room);
 							sp.add(currentRoom);
 							currentRoom.setEditable(false);
 							sp.add(person);
-							sp.add(personAccusation);
+							sp.add(personCombo);
 							sp.add(weapon);
-							sp.add(weaponAccusation);	
+							sp.add(weaponCombo);	
 							sp.add(submit);
 							add(sp);
 
-							final JFrame sf = new JFrame();
+							sf = new JFrame();
 							sf.setTitle("Suggestion!");
 							sf.setSize(300, 200);
 							sf.add(sp, BorderLayout.CENTER);
 							sf.setVisible(true);
-							submitted = false;
-							class submitSuggListener implements ActionListener {
-
-								@Override
-								public void actionPerformed(ActionEvent e) {
-									choosenPerson = personCombo.getSelectedItem().toString();
-									choosenRoom = currentRoom.getText().toString();
-									choosenWeapon = weaponCombo.getSelectedItem().toString();
-									submitted = true;
-									sf.setVisible(false);								
-									
-								}
-								
-							}
-							submit.addActionListener(new submitSuggListener());
+							
 						}
 						ControlPanel.humanTurn = false;
 						ControlPanel.computerTurn = true;
@@ -180,8 +168,7 @@ public class Board extends JPanel {
 		public void mouseExited(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
 	}
-	
-	
+
 	
 	/* 
 	 * Function loads values from files stored in legend and layout
