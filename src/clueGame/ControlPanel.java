@@ -95,21 +95,6 @@ public class ControlPanel extends JPanel{
 					computerTurn(b, b.getComputerPlayer(cnt));
 				}
 
-
-				if(b.submitted) {
-					guessField.setText(b.choosenPerson+" in "+b.choosenRoom+ " \nwith the " + b.choosenWeapon);
-
-					if(b.getHumanPlayer().getCurrentLocation().isRoom()){
-						ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
-						
-						for(ComputerPlayer c : compP) {
-							if(c.getName().equals(b.choosenPerson)){
-								c.setCurrentLocation(b.getHumanPlayer().getCurrentLocation());
-							}
-						}
-					}
-
-				}
 				b.submitted = false;
 			}
 		}
@@ -136,6 +121,15 @@ public class ControlPanel extends JPanel{
 						+" in "+b.currentRoom.getText().toString()
 						+ " \nwith the " + b.weaponCombo.getSelectedItem().toString());
 				b.sf.setVisible(false);									
+				
+				ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
+				for(ComputerPlayer c : compP) {
+					if(c.getName().equals(b.personCombo.getSelectedItem().toString())){
+						c.setCurrentLocation(b.getHumanPlayer().getCurrentLocation());
+						b.repaint();
+					}
+				}
+				
 			}
 
 		}
