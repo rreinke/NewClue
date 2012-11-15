@@ -123,12 +123,33 @@ public class ControlPanel extends JPanel{
 				b.sf.setVisible(false);									
 				
 				ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
+				ArrayList<Card> compPCards = new ArrayList<Card>();
+				ArrayList<Card> dealtCards = new ArrayList<Card>();
+
 				for(ComputerPlayer c : compP) {
 					if(c.getName().equals(b.personCombo.getSelectedItem().toString())){
 						c.setCurrentLocation(b.getHumanPlayer().getCurrentLocation());
 						b.repaint();
 					}
 				}
+				for(ComputerPlayer c : compP) {
+					for(Card cc: c.getCards())
+						compPCards.add(cc);
+				}
+
+				for(Card c: compPCards){
+					if(c.getName().equals(b.personCombo.getSelectedItem().toString()) 
+							|| c.getName().equals(b.currentRoom.getText().toString()) 
+							|| c.getName().equals(b.weaponCombo.getSelectedItem().toString())){
+						dealtCards.add(c);
+					}
+				}
+				if(dealtCards.isEmpty()) {
+					respField.setText("no new clue");
+				} else {
+					respField.setText(dealtCards.get(0).getName());
+				}
+
 				
 			}
 
@@ -297,28 +318,28 @@ public class ControlPanel extends JPanel{
 		b.calcTargets(indx, rolling);
 		setCell = b.getTargets();
 
-		ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
-		ArrayList<Card> compPCards = new ArrayList<Card>();
-		ArrayList<Card> dealtCards = new ArrayList<Card>();
+//		ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
+//		ArrayList<Card> compPCards = new ArrayList<Card>();
+//		ArrayList<Card> dealtCards = new ArrayList<Card>();
 
 		if(hp.getCurrentLocation().isRoom()){
-			for(ComputerPlayer c : compP) {
-				for(Card cc: c.getCards())
-					compPCards.add(cc);
-			}
-
-			for(Card c: compPCards){
-				if(c.getName().equals(b.choosenPerson) 
-						|| c.getName().equals(b.choosenRoom) 
-						|| c.getName().equals(b.choosenWeapon)){
-					dealtCards.add(c);
-				}
-			}
-			if(dealtCards.isEmpty()) {
-				respField.setText("no new clue");
-			} else {
-				respField.setText(dealtCards.get(0).getName());
-			}
+//			for(ComputerPlayer c : compP) {
+//				for(Card cc: c.getCards())
+//					compPCards.add(cc);
+//			}
+//
+//			for(Card c: compPCards){
+//				if(c.getName().equals(b.choosenPerson) 
+//						|| c.getName().equals(b.choosenRoom) 
+//						|| c.getName().equals(b.choosenWeapon)){
+//					dealtCards.add(c);
+//				}
+//			}
+//			if(dealtCards.isEmpty()) {
+//				respField.setText("no new clue");
+//			} else {
+//				respField.setText(dealtCards.get(0).getName());
+//			}
 
 		}
 
