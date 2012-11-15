@@ -237,6 +237,9 @@ public class ControlPanel extends JPanel{
 					for(Card cc: c.getCards())
 						compPCards.add(cc);
 				}
+				if(c.getName().equals(cp.getSuggestedPerson().getName())){
+					c.setCurrentLocation(cp.getCurrentLocation());
+				}
 			}
 
 			for(Card c: compPCards){
