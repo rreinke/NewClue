@@ -11,7 +11,6 @@ public abstract class Player {
 	protected BoardCell currentLocation;
 	
 	public Player() {
-		// TODO Auto-generated constructor stub
 		this.name = "???";
 		cards = new ArrayList<Card>();
 		color = Color.BLACK;
@@ -23,6 +22,11 @@ public abstract class Player {
 		cards = new ArrayList<Card>();
 		this.color = color;
 		this.currentLocation = startingLocation;
+	}
+	
+	public void setCurrentLocation(int row, int col) {
+		this.currentLocation.row = row;
+		this.currentLocation.col = col;
 	}
 
 	public String getName()

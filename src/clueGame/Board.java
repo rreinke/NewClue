@@ -11,8 +11,12 @@
  */
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
@@ -28,22 +32,25 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import clueGame.Card.CardType;
-
-
 
 public class Board extends JPanel {
 
 	// Variables
+	Solution solution;
 	private ArrayList<ComputerPlayer> computerPlayers;
 	private Player currentPlayer;
 	//In case we ever want more than one human player
 	private ArrayList<HumanPlayer> humanPlayer;
 	private ArrayList<Card> cards;
-	public Solution solution;
 	private ArrayList<BoardCell> cells;
 	private Map<Character,String> rooms;
 	private int numRows;
@@ -57,9 +64,15 @@ public class Board extends JPanel {
 	private final String WEAPON_FILE = "src/Weapons.csv";
 	private final String PLAYER_FILE = "src/Player.csv";
 	static final int SIDE = 40;
-
-
-
+	Graphics g;
+	JTextField currentRoom ;
+	JComboBox roomCombo, weaponCombo, personCombo;
+	
+	String choosenPerson="";
+	String choosenRoom="";
+	String choosenWeapon="";
+	
+	static boolean submitted = false; 
 	// Constructor
 	public Board() {
 		computerPlayers = new ArrayList<ComputerPlayer>();
@@ -84,31 +97,82 @@ public class Board extends JPanel {
 	class CellListener implements MouseListener {
 		int x, y;
 		Set<BoardCell> options = getTargets();
-
+		
 		@Override
 		public void mousePressed(MouseEvent e) {
-
-			Set<BoardCell> options = getTargets();
-			for(BoardCell bc : options) {
-				int x = e.getX();
-				int y = e.getY();
-				int xLowerBound = bc.col*SIDE;
-				int xUpperBound = xLowerBound + SIDE;
-				int yLowerBound = bc.row*SIDE;
-				int yUpperBound = yLowerBound + SIDE;
-
-				if((x > xLowerBound) && (x < xUpperBound) && (y > yLowerBound) && (y < yUpperBound)) {
-					getHumanPlayer().setCurrentLocation(bc);
-					repaint();
-					ControlPanel.humanTurn = false;
-					ControlPanel.computerTurn = true;
-				} 
-			}
 			if(ControlPanel.humanTurn) {
-				JOptionPane.showMessageDialog(getParent(), "Invalid move!");
-			}
-			for(BoardCell cell : options) {
-				//Redraw the cells with correct colors
+				Set<BoardCell> options = getTargets();
+				for(BoardCell bc : options) {
+					int x = e.getX();
+					int y = e.getY();
+					int xLowerBound = bc.col*SIDE;
+					int xUpperBound = xLowerBound + SIDE;
+					int yLowerBound = bc.row*SIDE;
+					int yUpperBound = yLowerBound + SIDE;
+
+					if((x > xLowerBound) && (x < xUpperBound) && (y > yLowerBound) && (y < yUpperBound)) {
+						getHumanPlayer().setCurrentLocation(bc.row,bc.col);
+						repaint();
+						if(getBoardCellAt(calcIndex(getHumanPlayer().currentLocation.row, getHumanPlayer().currentLocation.col)).isRoom()) {
+							
+							JPanel sp = new JPanel();
+							JButton submit = new JButton("Submit");
+							
+							//submit.addActionListener(new submitListener());
+							JLabel room, person, weapon;
+							currentRoom =
+							new JTextField(getRoomCellAt(getHumanPlayer().currentLocation.row, getHumanPlayer().currentLocation.col).getRoomName());
+							JComboBox personAccusation, weaponAccusation;
+
+							room = new JLabel("Room");
+							person = new JLabel("Person");
+							weapon = new JLabel("Weapon");
+							sp.setLayout(new GridLayout(4, 2));
+
+							personAccusation = createNewPersonComboBox();
+							weaponAccusation = createNewWeaponComboBox();
+
+							sp.add(room);
+							sp.add(currentRoom);
+							currentRoom.setEditable(false);
+							sp.add(person);
+							sp.add(personAccusation);
+							sp.add(weapon);
+							sp.add(weaponAccusation);	
+							sp.add(submit);
+							add(sp);
+
+							final JFrame sf = new JFrame();
+							sf.setTitle("Suggestion!");
+							sf.setSize(300, 200);
+							sf.add(sp, BorderLayout.CENTER);
+							sf.setVisible(true);
+							submitted = false;
+							class submitSuggListener implements ActionListener {
+
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									choosenPerson = personCombo.getSelectedItem().toString();
+									choosenRoom = currentRoom.getText().toString();
+									choosenWeapon = weaponCombo.getSelectedItem().toString();
+									submitted = true;
+									sf.setVisible(false);								
+									
+								}
+								
+							}
+							submit.addActionListener(new submitSuggListener());
+						}
+						ControlPanel.humanTurn = false;
+						ControlPanel.computerTurn = true;
+					} 
+				}
+				if(ControlPanel.humanTurn) {
+					JOptionPane.showMessageDialog(getParent(), "Invalid move!");
+				}
+				for(BoardCell cell : options) {
+					//Redraw the cells with correct colors
+				}
 			}
 		}
 		public void mouseClicked(MouseEvent e) {}
@@ -116,7 +180,9 @@ public class Board extends JPanel {
 		public void mouseExited(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
 	}
-
+	
+	
+	
 	/* 
 	 * Function loads values from files stored in legend and layout
 	 * into cells and rooms variables.
@@ -674,15 +740,61 @@ public class Board extends JPanel {
 		{
 			for (int j=0; j<getNumColumns(); j++)
 			{
-				if (getTargets().contains(getBoardCellAt(calcIndex(i,j)))) {
+				if (getTargets().contains(getBoardCellAt(calcIndex(i, j)))) {
 					if(ControlPanel.humanTurn) {
 						getBoardCellAt(calcIndex(i, j)).drawTargets(g);
 					}
 				}
 			}
+		}	
+	}
+	
+
+	public JComboBox createNewPersonComboBox() {
+		personCombo = new JComboBox();
+		ArrayList<String> names = new ArrayList<String>();
+		names.add(getHumanPlayer().getName());
+		for(int i = 0; i < getComputerPlayers().size(); i++) {
+			names.add(getComputerPlayer(i).getName());
 		}
+		for(String n : names) {
+			personCombo.addItem(n);
+		}
+		return personCombo;
 	}
 
+	public JComboBox createNewWeaponComboBox() {
+		weaponCombo = new JComboBox();
+		ArrayList<Card> cards = new ArrayList<Card>();
+		ArrayList<String> weapons = new ArrayList<String>();
+		cards = getCards();
+		for(Card c : cards) {
+			if(c.getCardType() == CardType.WEAPON) {
+				weapons.add(c.getName());
+			}
+		}
+
+		for(String w : weapons) {
+			weaponCombo.addItem(w);
+		}
+		return weaponCombo;
+	}
+
+	public JComboBox createNewRoomComboBox() {
+		roomCombo = new JComboBox();
+		ArrayList<Card> cards = new ArrayList<Card>();
+		ArrayList<String> rooms = new ArrayList<String>();
+		cards = getCards();
+		for(Card c : cards) {
+			if(c.getCardType() == CardType.ROOM) {
+				rooms.add(c.getName());
+			}
+		}
+		for(String r : rooms) {
+			roomCombo.addItem(r);
+		}
+		return roomCombo;
+	}
 
 }
 

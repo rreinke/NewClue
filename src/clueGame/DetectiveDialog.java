@@ -22,7 +22,7 @@ public class DetectiveDialog extends JDialog {
 		//Main JPanel on Detective Notes
 		setTitle("Detective Notes");
 		setLayout(new GridLayout(1, 2));
-		setSize(800, 800);
+		setSize(550, 600);
 		//Create a nested panel for the right-hand side of the notes for the Cards
 		JPanel cardOptions = new JPanel();
 		//The cardOptions panel must have one panel each for the people, room and weapon cards

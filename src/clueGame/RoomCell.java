@@ -3,8 +3,6 @@ package clueGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class RoomCell extends BoardCell {
 	public enum DoorDirection	{
@@ -63,7 +61,9 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	public boolean isDoorway(){
-		if(doorDirection.equals(DoorDirection.NONE)) return false;
+		if(doorDirection.equals(DoorDirection.NONE)) {
+			return false;
+		}
 		return true;
 	}
 
@@ -101,6 +101,12 @@ public class RoomCell extends BoardCell {
 			g.drawString(rc.roomName, rc.col*SIDE, rc.row*SIDE);
 		}
 	}
+	
+	@Override
+	public void drawTargets(Graphics g) {
+		g.setColor(Color.RED);
+		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
+	}
 
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
@@ -118,9 +124,4 @@ public class RoomCell extends BoardCell {
 		return roomName;
 	}
 
-	@Override
-	public void drawTargets(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
-	}
 }

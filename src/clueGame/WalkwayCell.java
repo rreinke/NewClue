@@ -44,5 +44,5 @@ public class WalkwayCell extends BoardCell {
 		g.setColor(Color.RED);
 		g.fillRect(this.col*SIDE, this.row*SIDE, SIDE, SIDE);
 	}
-	
+
 }

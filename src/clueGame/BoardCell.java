@@ -8,23 +8,22 @@ abstract public class BoardCell {
 	protected char cellType;
 	public static final int SIDE = 33;
 	
-	public BoardCell(){
-		
-	}
+	public BoardCell() {}
 
-	public boolean isWalkway(){
+	public boolean isWalkway() {
 		return false;
 	}
 
-	public boolean isRoom(){
+	public boolean isRoom() {
 		return false;
 	}
 
-	public boolean isDoorway(){
+	public boolean isDoorway() {
 		return false;
 	}
 
 	abstract public void draw(Graphics g, Board b);
+
 	abstract public void drawTargets(Graphics g);
 }
 

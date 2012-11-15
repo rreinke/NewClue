@@ -1,41 +1,48 @@
 package clueGame;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import clueGame.Card.CardType;
+
+/*1. Fix mouse listener
+ * 2. Get rid of red squares for the computer turn (not have to push nxtPlayer twice)
+ * 3. Make sure that a suggestion is made when a player enters a room
+ * 4. Randomly choose a card to disprove a suggestion/accusation
+ * 
+ */
 
 import clueGame.Card.CardType;
 
 public class ControlPanel extends JPanel{
-	JLabel whos, die, guess, response;	
-	JTextField turnField, respField, dieField, guessField;
-	JButton nxtPlayer, mkAccusation, submit;
+	JLabel whos, die;	
+	JTextField turnField, dieField ;
+	JTextArea guessField, respField;
+
+	JButton nxtPlayer, mkAccusation, submitAcc, submitSugg;
 	JPanel diePanel, gPanel, gResultPanel, whosPanel;
 	JComboBox personAccusation, roomAccusation, weaponAccusation;
+	JComboBox roomCombo, weaponCombo, personCombo;
 	
 	Random rand = new Random();
 	int rolling;
 	int indx;
 	Board b = new Board();
-	HumanPlayer humanP = b.getHumanPlayer();
 	ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
 	int cnt = compP.size();
 	BoardCell bCell;
@@ -43,21 +50,19 @@ public class ControlPanel extends JPanel{
 	//Graphics g;
 	static boolean humanTurn = false;
 	static boolean computerTurn = false;
-	
-	public ControlPanel() {
+
+	public ControlPanel(final Board b) {
 		whos = new JLabel("Whose Turn?");
 		die = new JLabel("Roll");
-		guess = new JLabel("Guess");
-		response = new JLabel("Response");
 
 		turnField = new JTextField(20);
-		respField = new JTextField("Response");
+		respField = new JTextArea();
 		dieField = new JTextField("5");
-		guessField = new JTextField("Guess");
+		guessField = new JTextArea(2,1);
 		respField.setEditable(false);
 		dieField.setEditable(false);
 		guessField.setEditable(false);
-
+		
 		nxtPlayer = new JButton("Next Player");
 		mkAccusation = new JButton("Make Accusation");
 
@@ -66,49 +71,41 @@ public class ControlPanel extends JPanel{
 		diePanel = new JPanel();
 		whosPanel = new JPanel();
 		whosPanel.setLayout(new GridLayout(2,1));
-		
+
 		whosPanel.add(whos);
 		whosPanel.add(turnField);
 		diePanel.add(die);
 		diePanel.add(dieField);
 		diePanel.setBorder(new TitledBorder(new EtchedBorder(), "Die"));
-		gPanel.add(guess);
 		gPanel.add(guessField);
-		gPanel.setBorder(new TitledBorder(new EtchedBorder(), "People"));
-		gResultPanel.add(response);
+		gPanel.setBorder(new TitledBorder(new EtchedBorder(), "Guess"));
 		gResultPanel.add(respField);
-		gResultPanel.setBorder(new TitledBorder(new EtchedBorder(), "Room"));
-		
-		class nxtPlayerListener implements ActionListener {
+		gResultPanel.setBorder(new TitledBorder(new EtchedBorder(), "Response To Guess"));
 
+		class nxtPlayerListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				if(cnt == compP.size()) {
 					computerTurn = false;
 					humanTurn(b,b.getHumanPlayer());
 					cnt = 0;
 				}
-				else {
+				else if (computerTurn) {
 					computerTurn(b, b.getComputerPlayer(cnt));
 				}
-				//roll the dice and display the number -- DONE
-				//display whose turn it is -- DONE
-				//if computerPlayer turn call computerTurn()
-				//if humanPlayer turn call humanTurn()
-				//Do not go on to the next player if the it the target has not been selected
 			}
 		}
 
 		nxtPlayer.addActionListener(new nxtPlayerListener());
 		
-		class submitListener implements ActionListener {
+		class submitAccListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				if(personAccusation.getSelectedItem().toString().equals(b.solution.person.getName()) &&
 						roomAccusation.getSelectedItem().toString().equals(b.solution.room.getName()) &&
 						weaponAccusation.getSelectedItem().toString().equals(b.solution.weapon.getName())) {
-					JOptionPane.showMessageDialog(submit, "YOU WIN!!!!");
+					JOptionPane.showMessageDialog(submitAcc, "YOU WIN!!!!");
 				} else {
-					JOptionPane.showMessageDialog(submit, "Not quite...");
+					JOptionPane.showMessageDialog(submitAcc, "Not quite...");
 				}
 			}
 		}
@@ -117,8 +114,8 @@ public class ControlPanel extends JPanel{
 		class accusationPanel extends JPanel {
 			public accusationPanel() {
 				JPanel ap = new JPanel();
-				submit = new JButton("Submit");
-				submit.addActionListener(new submitListener());
+				submitAcc = new JButton("Submit");
+				submitAcc.addActionListener(new submitAccListener());
 				JLabel room, person, weapon;
 
 				room = new JLabel("Room");
@@ -136,7 +133,7 @@ public class ControlPanel extends JPanel{
 				ap.add(personAccusation);
 				ap.add(weapon);
 				ap.add(weaponAccusation);	
-				ap.add(submit);
+				ap.add(submitAcc);
 				add(ap);
 			}
 		}
@@ -173,63 +170,120 @@ public class ControlPanel extends JPanel{
 		add(gPanel);
 		add(gResultPanel);
 	}
-	
+
 	public void computerTurn(Board b , ComputerPlayer cp) {
+		guessField.setText("-");
+		respField.setText("-");
+
 		cnt++;
-		
+
 		// Rolling the die
 		rolling = rand.nextInt(6)+1;
 		dieField.setText(""+rolling);
-		
+
 		// Putting the name in its field
 		turnField.setText(cp.getName());
-		
+
 		// Calculate the current index
 		indx = b.calcIndex(cp.getCurrentLocation().row, cp.getCurrentLocation().col);
-		
+
 		// Picking the targets from current location
 		b.calcTargets(indx, rolling);
 		setCell = b.getTargets(); 
-		
-		// Picking randomly target and set it as the current one
-		bCell = cp.pickLocation(setCell);
-		cp.setCurrentLocation(bCell);
-		
+		cp.setCurrentLocation(cp.pickLocation(setCell));
+
+		//Displaying roll to the screen
+		dieField.setText(Integer.toString(rolling));
+
+
+
 		// In case computer player is in a room...
-		if(bCell.isRoom()) {
+		if(cp.getCurrentLocation().isRoom()){
 			cp.createSuggestion(b.getCards());
-			guessField.setText(cp.getSuggestedPerson().getName() +", "
-								+ cp.getSuggestedWeapon().getName());
-			respField.setText(((RoomCell)(bCell)).getRoomName());
+			guessField.setText(cp.getSuggestedPerson().getName() +" in "+((RoomCell) cp.getCurrentLocation()).getRoomName()+ " \nwith the " + cp.getSuggestedWeapon().getName());
+			
+			ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
+			HumanPlayer hplayer = b.getHumanPlayer();
+			ArrayList<Card> compPCards = new ArrayList<Card>();
+			ArrayList<Card> dealtCards = new ArrayList<Card>();
+			
+			for(Card hc : hplayer.getCards()){
+				compPCards.add(hc);
+			}
+			
+			for(ComputerPlayer c : compP) {
+				if(!c.equals(cp)){
+					for(Card cc: c.getCards())
+					compPCards.add(cc);
+				}
+			}
+			
+			for(Card c: compPCards){
+				if(c.equals(cp.getSuggestedPerson()) || c.equals(cp.getSuggestedRoom()) || c.equals(cp.getSuggestedWeapon())){
+					dealtCards.add(c);
+				}
+			}
+			if(dealtCards.isEmpty()) {
+				respField.setText("no new clue");
+			} else {
+				respField.setText(dealtCards.get(0).getName());
+			}
 		}
+
 		b.repaint();
-		
+
 	}
-	
+
+
 	public void humanTurn(Board b, HumanPlayer hp) {
 		humanTurn = true;
-		
+
 		// Rolling the die
 		rolling = rand.nextInt(6)+1;
 		dieField.setText(""+rolling);
-				
+
 		// Putting the name in its field
-		turnField.setText(humanP.getName());
-		
+		turnField.setText(hp.getName());
+
 		// Calculate the current index
-		indx = b.calcIndex(humanP.getCurrentLocation().row, humanP.getCurrentLocation().col);
-				
+		indx = b.calcIndex(hp.getCurrentLocation().row, hp.getCurrentLocation().col);
+
 		// Picking the targets from current location
 		b.calcTargets(indx, rolling);
 		setCell = b.getTargets();
 		
+		ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
+		ArrayList<Card> compPCards = new ArrayList<Card>();
+		ArrayList<Card> dealtCards = new ArrayList<Card>();
+		
+		for(ComputerPlayer c : compP) {
+			for(Card cc: c.getCards())
+				compPCards.add(cc);
+		}
+		
+		for(Card c: compPCards){
+			if(c.getName().equals(b.choosenPerson) 
+					|| c.getName().equals(b.choosenRoom) 
+					|| c.getName().equals(b.choosenWeapon)){
+				dealtCards.add(c);
+			}
+		}
+		if(dealtCards.isEmpty()) {
+			respField.setText("no new clue");
+		} else {
+			respField.setText(dealtCards.get(0).getName());
+		}
+		
+		if(b.submitted) {
+			guessField.setText(b.choosenPerson+" in "+b.choosenRoom+ " \nwith the " + b.choosenWeapon);
+		}
 		b.repaint();
-		
-		
+
 	}
-	
+
+
 	public JComboBox createNewPersonComboBox(Board b) {
-		JComboBox personCombo = new JComboBox();
+		personCombo = new JComboBox();
 		ArrayList<String> names = new ArrayList<String>();
 		names.add(b.getHumanPlayer().getName());
 		for(int i = 0; i < b.getComputerPlayers().size(); i++) {
@@ -242,7 +296,7 @@ public class ControlPanel extends JPanel{
 	}
 
 	public JComboBox createNewWeaponComboBox(Board b) {
-		JComboBox weaponCombo = new JComboBox();
+		weaponCombo = new JComboBox();
 		ArrayList<Card> cards = new ArrayList<Card>();
 		ArrayList<String> weapons = new ArrayList<String>();
 		cards = b.getCards();
@@ -251,14 +305,15 @@ public class ControlPanel extends JPanel{
 				weapons.add(c.getName());
 			}
 		}
+
 		for(String w : weapons) {
 			weaponCombo.addItem(w);
 		}
 		return weaponCombo;
 	}
-	
+
 	public JComboBox createNewRoomComboBox(Board b) {
-		JComboBox roomCombo = new JComboBox();
+		roomCombo = new JComboBox();
 		ArrayList<Card> cards = new ArrayList<Card>();
 		ArrayList<String> rooms = new ArrayList<String>();
 		cards = b.getCards();
@@ -274,3 +329,4 @@ public class ControlPanel extends JPanel{
 	}
 
 }
+

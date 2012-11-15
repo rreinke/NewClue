@@ -35,19 +35,19 @@ public class PlayerPanel extends JPanel{
 			//Add name to the text if there is already text
 			if(c.getCardType() == CardType.PERSON) {
 				if(!(personTxt.equals(""))) {
-					personTxt = personTxt + " \n" + (c.getName());
+					personTxt = personTxt + "\n" + (c.getName());
 				} else {
 					personTxt = c.getName();
 				}
 			} else if(c.getCardType() == CardType.ROOM) {
 				if(!(roomTxt.equals(""))) {
-					roomTxt = roomTxt + " \n" + (c.getName());
+					roomTxt = roomTxt + "\n" + (c.getName());
 				} else {
 					roomTxt = c.getName();
 				}
 			} else {
 				if(!(weaponTxt.equals(""))) {
-					weaponTxt = weaponTxt + " \n" + (c.getName());
+					weaponTxt = weaponTxt + "\n" + (c.getName());
 				} else {
 					weaponTxt = c.getName();
 				}
