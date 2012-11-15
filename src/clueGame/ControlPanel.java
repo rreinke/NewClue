@@ -98,6 +98,17 @@ public class ControlPanel extends JPanel{
 
 				if(b.submitted) {
 					guessField.setText(b.choosenPerson+" in "+b.choosenRoom+ " \nwith the " + b.choosenWeapon);
+
+					if(b.getHumanPlayer().getCurrentLocation().isRoom()){
+						ArrayList<ComputerPlayer> compP = b.getComputerPlayers();
+						
+						for(ComputerPlayer c : compP) {
+							if(c.getName().equals(b.choosenPerson)){
+								c.setCurrentLocation(b.getHumanPlayer().getCurrentLocation());
+							}
+						}
+					}
+
 				}
 				b.submitted = false;
 			}
@@ -128,6 +139,7 @@ public class ControlPanel extends JPanel{
 			}
 
 		}
+
 		b.submit.addActionListener(new submitSuggListener());
 
 
@@ -253,14 +265,14 @@ public class ControlPanel extends JPanel{
 				if(cp.getSuggestedPerson().toString().equals(b.solution.person.getName()) &&
 						cp.getSuggestedRoom().toString().equals(b.solution.room.getName()) &&
 						cp.getSuggestedWeapon().toString().equals(b.solution.weapon.getName())) {
-						state = "Accusation is right!";
+					state = "Accusation is right!";
 				}else {
 					state = "Accusation is wrong!";
 				}
-					JOptionPane.showMessageDialog(null, cp.getSuggestedPerson() + " in " 
-							+ cp.getSuggestedRoom() + " with " 
-							+ cp.getSuggestedWeapon() + "\n" + state);
-				
+				JOptionPane.showMessageDialog(null, cp.getSuggestedPerson().getName() + " in " 
+						+ cp.getSuggestedRoom().getName() + " with " 
+						+ cp.getSuggestedWeapon().getName() + "\n" + state);
+
 			} else {
 				respField.setText(dealtCards.get(0).getName());
 			}
@@ -272,6 +284,9 @@ public class ControlPanel extends JPanel{
 
 
 	public void humanTurn(Board b, HumanPlayer hp) {
+		guessField.setText("-");
+		respField.setText("-");
+
 		humanTurn = true;
 
 		// Rolling the die
@@ -292,22 +307,25 @@ public class ControlPanel extends JPanel{
 		ArrayList<Card> compPCards = new ArrayList<Card>();
 		ArrayList<Card> dealtCards = new ArrayList<Card>();
 
-		for(ComputerPlayer c : compP) {
-			for(Card cc: c.getCards())
-				compPCards.add(cc);
-		}
-
-		for(Card c: compPCards){
-			if(c.getName().equals(b.choosenPerson) 
-					|| c.getName().equals(b.choosenRoom) 
-					|| c.getName().equals(b.choosenWeapon)){
-				dealtCards.add(c);
+		if(hp.getCurrentLocation().isRoom()){
+			for(ComputerPlayer c : compP) {
+				for(Card cc: c.getCards())
+					compPCards.add(cc);
 			}
-		}
-		if(dealtCards.isEmpty()) {
-			respField.setText("no new clue");
-		} else {
-			respField.setText(dealtCards.get(0).getName());
+
+			for(Card c: compPCards){
+				if(c.getName().equals(b.choosenPerson) 
+						|| c.getName().equals(b.choosenRoom) 
+						|| c.getName().equals(b.choosenWeapon)){
+					dealtCards.add(c);
+				}
+			}
+			if(dealtCards.isEmpty()) {
+				respField.setText("no new clue");
+			} else {
+				respField.setText(dealtCards.get(0).getName());
+			}
+
 		}
 
 

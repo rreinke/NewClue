@@ -19,7 +19,7 @@ public class ClueGame extends JFrame {
 		setTitle("Clue");
 		setSize(720,705);
 		b = new Board();
-		System.out.println(b.solution.room.getName() + " " + b.solution.person.getName() + " " + b.solution.weapon.getName());
+		//SOLUTION >>System.out.println(b.solution.room.getName() + " " + b.solution.person.getName() + " " + b.solution.weapon.getName());
 		add(b, BorderLayout.CENTER);
 		add(new PlayerPanel(b.getHumanPlayer()), BorderLayout.EAST);
 		add(new ControlPanel(b), BorderLayout.SOUTH);
